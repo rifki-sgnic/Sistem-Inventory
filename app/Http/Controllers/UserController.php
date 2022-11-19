@@ -38,6 +38,22 @@ class UserController extends Controller
         return redirect()->route('admin.user-management')->with('success', 'User berhasil ditambah!');
     }
 
+    public function update(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'username' => 'required',
+            'password' => 'required',
+            'role' => 'required',
+        ]);
+
+        $input = $request->except(['_token', 'submit']);
+        $input['password'] = bcrypt($request->password);
+
+        User::whereId($request->id)->update($input);
+        return redirect()->route('admin.user-management')->with('success', 'User berhasil diubah!');
+    }
+
     public function hapus(Request $request)
     {
         $id = $request->input('id');
@@ -46,6 +62,6 @@ class UserController extends Controller
 
         $data->delete();
 
-        return redirect()->route('admin.user-management')->with('success', 'Data berhasil dihapus!');
+        return redirect()->route('admin.user-management')->with('success', 'User berhasil dihapus!');
     }
 }

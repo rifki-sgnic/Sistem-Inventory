@@ -13,14 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('products', function (Blueprint $table) {
-            $table->id();
-            $table->string('kd_produk');
-            $table->string('nama_produk');
-            $table->string('type');
-            $table->string('merk');
-            $table->integer('qty');
-            $table->timestamps();
+        Schema::table('stock_transactions', function (Blueprint $table) {
+            $table->foreign('products_id', 'fk_stock_transactions_to_products')->references('id')->on('products')->onUpdate('cascade')->onDelete('cascade');
+
         });
     }
 
@@ -31,6 +26,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('products');
+        Schema::table('stock_transactions', function (Blueprint $table) {
+            $table->dropForeign('fk_stock_transactions_to_products');
+        });
     }
 };

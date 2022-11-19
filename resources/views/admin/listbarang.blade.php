@@ -10,14 +10,33 @@
     <div class="card-header py-3"></div>
     <div class="card-body">
 
+      @if ($message = session('success'))
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ $message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      @elseif($errors->any())
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      @endif
+
       <div class="d-flex flex-row mb-3">
-        <button type="button" class="btn btn-primary mx-1" data-toggle="modal" data-target="#modalTambahData">Tambah Data</button>
-        <button type="button" class="btn btn-primary mx-1" data-toggle="modal" data-target="#modalCetakPdf">Cetak Data</button>
+        <button class="btn btn-sm btn-primary mx-1" data-toggle="modal" data-target="#modalTambahData"><i
+            class="fa fa-plus text-white"></i> Tambah Data</button>
+        <button class="btn btn-sm btn-success mx-1"><i class="fa fa-print text-white"></i> Cetak Data</button>
       </div>
 
-      <div class="table-responsive">
-        <table id="tableListBarang" class="table table-bordered table-hover">
-          <thead bgcolor="eeeeee" align="center">
+      <div class="table-responsive-sm">
+        <table id="tableListBarang" class="table table-bordered text-center table-hover w-100 table-sm">
+          <thead bgcolor="eeeeee" align="center" class="w-100">
             <tr>
               <th>ID List</th>
               <th>Tanggal</th>
@@ -104,52 +123,50 @@
                   <div class="form-group">Nama Produk</div>
                 </td>
                 <td align="center" width="5%"">
-                  <div class=" form-group">:
+                  <div class=" form-group">:</div>
+                </td>
+                <td>
+                  <select name="satuan" class="form-control" required>
+                    <option value="#">All Item</option>
+                    <option value="RAM">External Hardisk</option>
+                    <option value="RAM">RAM</option>
+                    <option value="RAM">Mouse</option>
+                    <option value="RAM">Batre</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="form-group">Dari Tanggal</div>
+                </td>
+                <td align="center" width="5%">
+                  <div class="form-group">:
+                  </div>
+                </td>
+                <td>
+                  <input type="date" class="form-control" name="tgl_a" required>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="form-group">Sampai Tanggal</div>
+                </td>
+                <td align="center" width="5%">
+                  <div class=" form-group">:</div>
+                </td>
+                <td>
+                  <input type="date" class="form-control" name="tgl_a" required>
+                </td>
+              </tr>
+            </table>
+          </form>
         </div>
-        </td>
-        <td>
-          <select name="satuan" class="form-control" required>
-            <option value="#">All Item</option>
-            <option value="RAM">External Hardisk</option>
-            <option value="RAM">RAM</option>
-            <option value="RAM">Mouse</option>
-            <option value="RAM">Batre</option>
-          </select>
-        </td>
-        </tr>
-        <tr>
-          <td>
-            <div class="form-group">Dari Tanggal</div>
-          </td>
-          <td align="center" width="5%">
-            <div class="form-group">:
-            </div>
-          </td>
-          <td>
-            <input type="date" class="form-control" name="tgl_a" required>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <div class="form-group">Sampai Tanggal</div>
-          </td>
-          <td align="center" width="5%">
-            <div class=" form-group">:</div>
-          </td>
-          <td>
-            <input type="date" class="form-control" name="tgl_a" required>
-          </td>
-        </tr>
-        </table>
-        </form>
-      </div>
 
-      <div class="modal-footer">
-        <a href="./report/cetak_barang.php" target="_blank" class="btn btn-primary">Cetak Semua Data</a>
-      </div>
+        <div class="modal-footer">
+          <a href="./report/cetak_barang.php" target="_blank" class="btn btn-primary">Cetak Semua Data</a>
+        </div>
     </div>
   </div>
-</div>
 
 </div>
 

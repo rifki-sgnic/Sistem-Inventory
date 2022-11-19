@@ -24,7 +24,7 @@ class ProductController extends Controller
     {
         $request->validate([
             'kd_produk' => 'required',
-            'nama' => 'required',
+            'nama_produk' => 'required',
             'type' => 'required',
             'merk' => 'required',
             'qty' => 'required',
@@ -40,21 +40,15 @@ class ProductController extends Controller
     {
         $request->validate([
             'kd_produk' => 'required',
-            'nama' => 'required',
+            'nama_produk' => 'required',
             'type' => 'required',
             'merk' => 'required',
             'qty' => 'required',
         ]);
 
-        $data = array(
-            'kd_produk' => $request->kd_produk,
-            'nama' => $request->nama,
-            'type' => $request->type,
-            'merk' => $request->merk,
-            'qty' => $request->qty,
-        );
+        $input = $request->except(['_token', 'submit']);
 
-        Product::whereId($request->id)->update($data);
+        Product::whereId($request->id)->update($input);
         return redirect()->route('admin.master')->with('success', 'Data berhasil diupdate!');
     }
 

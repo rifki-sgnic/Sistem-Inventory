@@ -29,18 +29,18 @@
       @endif
 
       <div class="d-flex flex-row mb-3">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus text-white"></i> Tambah Data</button>
+        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalTambahData"><i class="fa fa-plus text-white"></i> Tambah Data</button>
       </div>
 
       <div class="table-responsive-sm">
-        <table id="tableUserData" class="table table-bordered text-center table-hover w-100 table-sm">
-          <thead bgcolor="eeeeee" align="center" class="w-100">
+        <table id="tableUserData" class="table table-striped text-center table-hover w-100 table-sm">
+          <thead class="w-100">
             <tr>
-              <th class="text-center">No.</th>
-              <th class="text-center">Nama</th>
-              <th class="text-center">Username</th>
-              <th class="text-center">Level</th>
-              <th class="text-center">Action</th>
+              <th>No</th>
+              <th>Nama</th>
+              <th>Username</th>
+              <th>Level</th>
+              <th>Action</th>
             </tr>
           </thead>
         </table>
@@ -49,8 +49,8 @@
   </div>
 
 
-  <!-- The Modal -->
-  <div class="modal" id="myModal">
+  <!-- Modal Tambah Data -->
+  <div class="modal" id="modalTambahData">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
 
@@ -89,6 +89,53 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             <button type="submit" class="btn btn-primary" name="submit">Simpan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Update Data -->
+  <div class="modal" id="modalUpdateData">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Update Data User</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <form action="{{ route('user-management.update') }}" method="POST">
+          @csrf
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="username">Nama</label>
+              <input type="text" name="name" placeholder="Nama" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input type="text" name="username" placeholder="username" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="text" name="password" placeholder="Password baru" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="level">Level</label>
+              <select class="form-control" name="role">
+                <option>Pilih Level ...</option>
+                @foreach ($roles as $role)
+                <option value="{{ $role->role }}">{{ $role->level }}</option>
+                @endforeach
+              </select>
+            </div>
+            <input type="hidden" name="id" required readonly>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" name="submit">Update</button>
           </div>
         </form>
       </div>

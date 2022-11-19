@@ -52,7 +52,7 @@
     <div id="outgoing" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
         <a class="collapse-item" href="{{ route('admin.list-barang') }}"> List Barang</a>
-        <a class="collapse-item" href="{{ route('admin.barang-masuk') }}"> Data Barang Masuk</a>
+        <a class="collapse-item" href="{{ route('admin.receive') }}"> Data Barang Masuk</a>
         <a class="collapse-item" href="{{ route('admin.barang-keluar') }}">Data Barang Keluar</a>
         <a class="collapse-item" href="{{ route('admin.return') }}">Return</a>
 

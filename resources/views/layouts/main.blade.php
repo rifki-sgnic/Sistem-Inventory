@@ -107,6 +107,7 @@
   <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
   <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
   <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+  <script src="{{ asset('js/moment-with-locales.js') }}"></script>
   <script src="{{ asset('js/pdfmake.min.js') }}"></script>
   <script src="{{ asset('js/vfs_fonts.js') }}"></script>
   <script src="{{ asset('js/ajax.js') }}"></script>

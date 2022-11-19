@@ -29,20 +29,20 @@
       @endif
 
       <div class="d-flex flex-row mb-3">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalTambahData"><i class="fa fa-plus text-white"></i> Tambah Data</button>
+        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalTambahData"><i class="fa fa-plus text-white"></i> Tambah Data</button>
       </div>
 
       <div class="table-responsive-sm">
-        <table id="tableMasterBarang" class="table table-bordered table-hover text-center w-100 table-sm">
-          <thead bgcolor="eeeeee" align="center" class="w-100">
+        <table id="tableMasterBarang" class="table table-striped table-hover text-center w-100 table-sm">
+          <thead class="w-100">
             <tr>
-              <th class="text-center">No.</th>
-              <th class="text-center">KD Produk</th>
-              <th class="text-center">Nama Produk</th>
-              <th class="text-center">Type</th>
-              <th class="text-center">Merk</th>
-              <th class="text-center">Qty</th>
-              <th class="text-center">Action</th>
+              <th>No</th>
+              <th>KD Produk</th>
+              <th>Nama Produk</th>
+              <th>Type</th>
+              <th>Merk</th>
+              <th>Qty</th>
+              <th>Action</th>
             </tr>
           </thead>
         </table>
@@ -72,7 +72,7 @@
             </div>
             <div class="form-group">
               <label for="nama">Nama Produk</label>
-              <input type="text" id="nama" name="nama" placeholder="nama produk" class="form-control" required>
+              <input type="text" id="nama" name="nama_produk" placeholder="nama produk" class="form-control" required>
             </div>
             <div class="form-group">
               <label for="type">Type</label>
