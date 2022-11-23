@@ -43,7 +43,7 @@
   </li>
 
   <hr class="sidebar-divider">
-  <li class="nav-item">
+  <li class="nav-item {{ Nav::isRoute('admin.list-barang') }} {{ Nav::isRoute('admin.receive') }} {{ Nav::isRoute('admin.transaction') }} {{ Nav::isRoute('admin.return') }}">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#outgoing" aria-expanded="true"
       aria-controls="collapsePages">
       <i class="fas fa-fw fa-truck"></i>
@@ -53,7 +53,7 @@
       <div class="bg-white py-2 collapse-inner rounded">
         <a class="collapse-item" href="{{ route('admin.list-barang') }}"> List Barang</a>
         <a class="collapse-item" href="{{ route('admin.receive') }}"> Data Barang Masuk</a>
-        <a class="collapse-item" href="{{ route('admin.barang-keluar') }}">Data Barang Keluar</a>
+        <a class="collapse-item" href="{{ route('admin.transaction') }}">Data Barang Keluar</a>
         <a class="collapse-item" href="{{ route('admin.return') }}">Return</a>
 
       </div>

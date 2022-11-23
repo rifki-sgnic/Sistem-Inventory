@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Receive;
+use App\Models\Transaction;
 use App\Models\StockTransaction;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,6 +19,11 @@ class Product extends Model
     public function receives()
     {
         return $this->hasMany(Receive::class, 'products_id');
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'products_id');
     }
 
     public function stock_transactions()

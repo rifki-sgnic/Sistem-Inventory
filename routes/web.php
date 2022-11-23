@@ -3,12 +3,15 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ReturnController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReceiveController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\ReceiveController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\ListProductController;
+use App\Http\Controllers\TransactionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,26 +50,28 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
     Route::post('/supplier/hapus', [SupplierController::class, 'hapus'])->name('supplier.hapus');
 
     // Route Data List Barang
-    Route::get('/list-barang', function () {
-        return view('admin.listbarang', ['title' => 'List Barang']);
-    })->name('admin.list-barang');
+    Route::get('/list-barang', [ListProductController::class, 'index'])->name('admin.list-barang');
+    Route::post('/list-barang/tambah', [ListProductController::class, 'tambah'])->name('list-barang.tambah');
+    Route::post('/list-barang/update', [ListProductController::class, 'update'])->name('list-barang.update');
+    Route::post('/list-barang/hapus', [ListProductController::class, 'hapus'])->name('list-barang.hapus');
 
     // Route Data Barang Masuk
     Route::get('/receive', [ReceiveController::class, 'index'])->name('admin.receive');
     Route::post('/receive/tambah', [ReceiveController::class, 'tambah'])->name('receive.tambah');
+    Route::post('/receive/update', [ReceiveController::class, 'update'])->name('receive.update');
     Route::post('/receive/hapus', [ReceiveController::class, 'hapus'])->name('receive.hapus');
 
     // Route Data Barang Keluar
-    Route::get('/barang-keluar', function () {
-        return view('admin.barangkeluar', [
-            'title' => 'Barang Keluar'
-        ]);
-    })->name('admin.barang-keluar');
+    Route::get('/transaction', [TransactionController::class, 'index'])->name('admin.transaction');
+    Route::post('/transaction/tambah', [TransactionController::class, 'tambah'])->name('transaction.tambah');
+    Route::post('/transaction/update', [TransactionController::class, 'update'])->name('transaction.update');
+    Route::post('/transaction/hapus', [TransactionController::class, 'hapus'])->name('transaction.hapus');
 
     // Route Data Return
-    Route::get('/return', function () {
-        return view('admin.return', ['title' => 'Return']);
-    })->name('admin.return');
+    Route::get('/return', [ReturnController::class, 'index'])->name('admin.return');
+    Route::post('/receive/tambah', [ReturnController::class, 'tambah'])->name('return.tambah');
+    Route::post('/receive/update', [ReturnController::class, 'update'])->name('return.update');
+    Route::post('/receive/hapus', [ReturnController::class, 'hapus'])->name('return.hapus');
 
     // Route Data User Management
     Route::get('/user-management', [UserController::class, 'index'])->name('admin.user-management');

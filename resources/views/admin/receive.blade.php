@@ -39,13 +39,13 @@
           <thead class="w-100">
             <tr>
               <th>No</th>
-              <th>Id Transaksi</th>
+              <th>Kode Transaksi</th>
               <th>Tanggal</th>
               <th>Produk</th>
               <th>Qty</th>
               <th>Supplier</th>
               <th>Note</th>
-              <th class="text-center"> Action </th>
+              <th>Action</th>
             </tr>
           </thead>
         </table>
@@ -71,7 +71,7 @@
             <div class="form-group">
               <label for="produk">Produk</label>
               <select name="products_id" id="produk" class="form-control" required>
-                <option value="#">Pilih produk ...</option>
+                <option value="">Pilih produk ...</option>
                 @foreach ($products as $product)
                 <option value="{{ $product->id }}">{{ $product->kd_produk . ' - ' . $product->nama_produk . ' - ' . $product->merk }}</option>
                 @endforeach
@@ -110,6 +110,66 @@
     </div>
   </div>
 
+  <!-- Modal Ubah Data -->
+  <div class="modal" id="modalUpdateData">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Update Barang Masuk</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <form action="{{ route('receive.update') }}" method="post">
+          @csrf
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="produk">Produk</label>
+              <select name="products_id" id="produk" class="form-control" required>
+                <option value="#">Pilih produk ...</option>
+                @foreach ($products as $product)
+                <option value="{{ $product->id }}">{{ $product->kd_produk . ' - ' . $product->nama_produk . ' - ' .
+                  $product->merk }}</option>
+                @endforeach
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="qty">QTY</label>
+              <input type="number" name="qty" id="qty" placeholder="qty" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="supplier">Supplier</label>
+              <select name="suppliers_id" id="supplier" class="form-control" required>
+                <option value="#">Pilih supplier ...</option>
+                @foreach ($suppliers as $supplier)
+                <option value="{{ $supplier->id }}">{{ $supplier->kd_supplier . ' - ' . $supplier->nama_supplier }}
+                </option>
+                @endforeach
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="tanggal">Tanggal</label>
+              <input type="date" name="created_at" id="tanggal" placeholder="tanggal" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="note">Noted</label>
+              <textarea class="form-control" name="note" id="note" rows="3"></textarea>
+            </div>
+            <input type="hidden" name="id" required readonly>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" name="submit">Simpan</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
   <!-- Modal Hapus Data -->
   <div class="modal" id="modalHapusData">
     <div class="modal-dialog modal-dialog-centered">
@@ -131,6 +191,8 @@
           <form action="{{ route('receive.hapus') }}" method="POST">
             @csrf
             <input type="hidden" name="id" required readonly>
+            <input type="hidden" name="products_id" required readonly>
+            <input type="hidden" name="invoice_number" required readonly>
             <button type="submit" class="btn btn-primary">Hapus</button>
           </form>
         </div>

@@ -102,6 +102,261 @@ $("#tableSupplier tbody").on("click", "button", function () {
 
 /* DataTable Supplier [END] */
 
+/* DataTable List Product [START] */
+
+var tableListBarang = $("#tableListBarang").DataTable({
+    deferRender: true,
+    ajax: "/list-barang",
+    columns: [
+        {
+            data: null,
+            render: function (data, type, full, meta) {
+                return meta.row + 1;
+            },
+        },
+        { data: "id" },
+        {
+            data: null,
+            render: function (data) {
+                return moment(data.created_at).format("DD MMMM YYYY");
+            },
+        },
+        { data: "no_request_product" },
+        { data: "no_pre_order" },
+        {
+            data: null,
+            render: function(data, type, full, meta) {
+                return (
+                    '<a href="storage/post-pdf/' +
+                    data.file +
+                    '">' +
+                    data.file +
+                    "</a>"
+                );
+            }
+        },
+        {
+            data: null,
+            render: function(data, type, full, meta) {
+                if(data.status == 'receive') {
+                    return '<span class="btn btn-sm btn-success disabled">Receive</span>'
+                } else if (data.status == 'indend') {
+                    return '<span class="btn btn-sm btn-primary disabled">Indend</span>';
+                } else {
+                    return '<button type="button" value="add_status" class="btn btn-sm btn-primary"><i class="fa fa-plus text-white"></i></button>';
+                }
+            }
+        },
+        {
+            data: null,
+            defaultContent: `
+                <button type="button" value="update" class="btn btn-sm btn-warning"><i class="fa fa-pen text-white"></i> Edit</button>
+                <button type="button" value="delete" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</button>
+                `,
+        },
+    ],
+});
+
+/* Aksi Update dan Delete dengan Modal */
+$("#tableListBarang tbody").on("click", "button", function () {
+    var data = tableListBarang.row($(this).parents("tr")).data();
+
+    if ($(this).prop("value") == "update") {
+        $("#modalUpdateData")
+            .find("input[name='no_request_product']")
+            .val(data["no_request_product"]);
+        $("#modalUpdateData")
+            .find("input[name='no_pre_order']")
+            .val(data["no_pre_order"]);
+        $("#modalUpdateData").find("select[name='status']").val(data["status"]);
+        $("#modalUpdateData")
+            .find("input[name='created_at']")
+            .val(moment(data["created_at"]).format("yyyy-MM-DD"));
+
+        $("#modalUpdateData").find("input[name='id']").val(data["id"]);
+        $("#modalUpdateData").modal("show");
+    } else if ($(this).prop("value") == "delete") {
+        $("#modalHapusData").find("p strong").html(data["no_request_product"]);
+
+        $("#modalHapusData").find("input[name='id']").val(data["id"]);
+        $("#modalHapusData").modal("show");
+    } else if ($(this).prop("value") == "add_status") {
+        alert('To Do')
+    }
+});
+
+/* DataTable List Product [END] */
+
+
+/* DataTable Receive [START] */
+var tableReceive = $("#tableReceive").DataTable({
+    deferRender: true,
+    ajax: "/receive",
+    columns: [
+        {
+            data: null,
+            render: function (data, type, full, meta) {
+                return meta.row + 1;
+            },
+        },
+        { data: "invoice_number" },
+        {
+            data: null,
+            render: function (data) {
+                return moment(data.created_at).format("DD MMMM YYYY");
+            },
+        },
+        {
+            data: null,
+            render: function (data, type, full, meta) {
+                return (
+                    data.products.kd_produk +
+                    " - " +
+                    data.products.nama_produk +
+                    " - " +
+                    data.products.type
+                );
+            },
+        },
+        { data: "qty" },
+        {
+            data: null,
+            render: function (data) {
+                return (
+                    data.suppliers.kd_supplier +
+                    " - " +
+                    data.suppliers.nama_supplier
+                );
+            },
+        },
+        { data: "note" },
+        {
+            data: null,
+            defaultContent: `
+                <button type="button" value="update" class="btn btn-sm btn-warning"><i class="fa fa-pen text-white"></i> Edit</button>
+                <button type="button" value="delete" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</button>
+                `,
+        },
+    ],
+});
+
+/* Aksi Update dan Delete dengan Modal */
+$("#tableReceive tbody").on("click", "button", function () {
+    var data = tableReceive.row($(this).parents("tr")).data();
+
+    if ($(this).prop("value") == "update") {
+        $("#modalUpdateData")
+            .find("select[name='products_id']")
+            .val(data["products_id"]);
+        $("#modalUpdateData").find("input[name='qty']").val(data["qty"]);
+        $("#modalUpdateData")
+            .find("select[name='suppliers_id']")
+            .val(data["suppliers_id"]);
+        $("#modalUpdateData")
+            .find("input[name='created_at']")
+            .val(moment(data["created_at"]).format("yyyy-MM-DD"));
+        $("#modalUpdateData").find("textarea[name='note']").val(data["note"]);
+
+        $("#modalUpdateData").find("input[name='id']").val(data["id"]);
+        $("#modalUpdateData").modal("show");
+    } else if ($(this).prop("value") == "delete") {
+        $("#modalHapusData").find("p strong").html(data["id"]);
+        $("#modalHapusData").find("input[name='id']").val(data["id"]);
+        $("#modalHapusData")
+            .find("input[name='products_id']")
+            .val(data["products_id"]);
+        $("#modalHapusData")
+            .find("input[name='invoice_number']")
+            .val(data["invoice_number"]);
+        $("#modalHapusData").modal("show");
+    }
+});
+
+/* DataTable Receive [END] */
+
+
+/* DataTable Transaction [START] */
+var tableTransaction = $("#tableTransaction").DataTable({
+    deferRender: true,
+    ajax: "/transaction",
+    columns: [
+        {
+            data: null,
+            render: function (data, type, full, meta) {
+                return meta.row + 1;
+            },
+        },
+        { data: "invoice_number" },
+        {
+            data: null,
+            render: function (data) {
+                return moment(data.created_at).format("DD MMMM YYYY");
+            },
+        },
+        {
+            data: null,
+            render: function (data, type, full, meta) {
+                return (
+                    data.products.kd_produk +
+                    " - " +
+                    data.products.nama_produk +
+                    " - " +
+                    data.products.type
+                );
+            },
+        },
+        { data: "qty" },
+        { data: "pic" },
+        { data: "note" },
+        {
+            data: null,
+            defaultContent: `
+                <button type="button" value="update" class="btn btn-sm btn-warning"><i class="fa fa-pen text-white"></i> Edit</button>
+                <button type="button" value="delete" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</button>
+                `,
+        },
+    ],
+});
+
+/* Aksi Update dan Delete dengan Modal */
+$("#tableTransaction tbody").on("click", "button", function () {
+    var data = tableTransaction.row($(this).parents("tr")).data();
+
+    if ($(this).prop("value") == "update") {
+        $("#modalUpdateData")
+            .find("select[name='products_id']")
+            .val(data["products_id"]);
+        $("#modalUpdateData").find("input[name='qty']").val(data["qty"]);
+        $("#modalUpdateData").find("input[name='pic']").val(data["pic"]);
+        $("#modalUpdateData")
+            .find("input[name='created_at']")
+            .val(moment(data["created_at"]).format("yyyy-MM-DD"));
+        $("#modalUpdateData").find("textarea[name='note']").val(data["note"]);
+
+        $("#modalUpdateData").find("input[name='id']").val(data["id"]);
+        $("#modalUpdateData").modal("show");
+    } else if ($(this).prop("value") == "delete") {
+        $("#modalHapusData").find("p strong").html(data["id"]);
+        $("#modalHapusData").find("input[name='id']").val(data["id"]);
+        $("#modalHapusData")
+            .find("input[name='products_id']")
+            .val(data["products_id"]);
+        $("#modalHapusData")
+            .find("input[name='invoice_number']")
+            .val(data["invoice_number"]);
+        $("#modalHapusData").modal("show");
+    }
+});
+
+
+/* DataTable Transaction [END] */
+
+/* DataTable Return [START] */
+
+    // TODO
+
+/* DataTable Return [END] */
+
 /* DataTable User Management [START] */
 var tableUserData = $("#tableUserData").DataTable({
     deferRender: true,
@@ -146,74 +401,3 @@ $("#tableUserData tbody").on("click", "button", function () {
 });
 
 /* DataTable User Management [END] */
-
-/* DataTable Receive [START] */
-var tableReceive = $("#tableReceive").DataTable({
-    deferRender: true,
-    ajax: "/receive",
-    columns: [
-        {
-            data: null,
-            render: function (data, type, full, meta) {
-                return meta.row + 1;
-            },
-        },
-        { data: "id" },
-        { data: null,
-        render: function(data) {
-            return moment(data.created_at).format("DD MMMM YYYY");
-        } },
-        {
-            data: null,
-            render: function (data, type, full, meta) {
-                return (
-                    data.products.kd_produk +
-                    " - " +
-                    data.products.nama_produk +
-                    " - " +
-                    data.products.type
-                );
-            },
-        },
-        { data: "qty" },
-        {
-            data: null,
-            render: function (data) {
-                return (
-                    data.suppliers.kd_supplier +
-                    " - " +
-                    data.suppliers.nama_supplier
-                );
-            },
-        },
-        { data: "note" },
-        {
-            data: null,
-            defaultContent: `
-                <button type="button" value="update" class="btn btn-sm btn-warning"><i class="fa fa-pen text-white"></i> Edit</button>
-                <button type="button" value="delete" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</button>
-                `,
-        },
-    ],
-});
-
-/* Aksi Update dan Delete dengan Modal */
-$("#tableReceive tbody").on("click", "button", function () {
-    var data = tableReceive.row($(this).parents("tr")).data();
-
-    if ($(this).prop("value") == "update") {
-        // $("#modalUpdateData").find("input[name='name']").val(data["name"]);
-        // $("#modalUpdateData")
-        //     .find("input[name='username']")
-        //     .val(data["username"]);
-        // $("#modalUpdateData").find("select[name='role']").val(data["role"]);
-        // $("#modalUpdateData").find("input[name='id']").val(data["id"]);
-        $("#modalUpdateData").modal("show");
-    } else if ($(this).prop("value") == "delete") {
-        $("#modalHapusData").find("p strong").html(data["id"]);
-        $("#modalHapusData").find("input[name='id']").val(data["id"]);
-        $("#modalHapusData").modal("show");
-    }
-});
-
-/* DataTable Receive [END] */

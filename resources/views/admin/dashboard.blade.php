@@ -14,7 +14,7 @@
     <div class="card-body">
 
       <nav>
-        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
           <a class="nav-item nav-link active" id="custom-nav-a-tab" data-toggle="tab" href="#custom-nav-a" role="tab"
             aria-controls="custom-nav-a" aria-selected="true">History Barang Masuk Hari Ini</a>
           <a class="nav-item nav-link" id="custom-nav-b-tab" data-toggle="tab" href="#custom-nav-b" role="tab"

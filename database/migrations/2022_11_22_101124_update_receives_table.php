@@ -13,12 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('stock_transactions', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-            $table->string('invoice_number');
-            $table->foreignId('products_id')->index('fk_stock_transactions_to_products');
-            $table->integer('qty');
+        Schema::table('receives', function (Blueprint $table) {
+            //
         });
     }
 
@@ -29,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('stock_transactions');
+        Schema::table('receives', function (Blueprint $table) {
+            //
+        });
     }
 };

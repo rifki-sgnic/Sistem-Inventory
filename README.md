@@ -14,7 +14,9 @@ Sistem Inventory dibuat menggunakan Laravel 9 dan Bootstrap 4
 
 ```bash
 #install node_modules
-npm install
+composer install
+
+php artisan key:generate
 
 #insert table database
 php artisan migrate

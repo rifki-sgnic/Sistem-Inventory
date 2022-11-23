@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('receives', function (Blueprint $table) {
             $table->id();
+            $table->string('invoice_number');
             $table->timestamps();
             $table->foreignId('products_id')->index('fk_receives_to_products');
             $table->integer('qty');

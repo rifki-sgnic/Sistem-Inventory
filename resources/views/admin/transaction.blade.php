@@ -2,8 +2,8 @@
 
 @section('main-content')
 
-<div id="content-barangreturn">
-  <h1 class="h3 mb-2 text-gray-800">Data Barang Return</h1>
+<div id="content-barangkeluar">
+  <h1 class="h3 mb-2 text-gray-800">Data Barang Keluar</h1>
   <p class="mb-4">Inventory <sup>App</sup></p>
 
   <div class="card shadow mb-4">
@@ -29,21 +29,20 @@
       @endif
 
       <div class="d-flex flex-row mb-3">
-        <button class="btn btn-sm btn-primary mx-1" data-toggle="modal" data-target="#modalTambahData"><i
-            class="fa fa-plus text-white"></i> Tambah Data</button>
+        <button class="btn btn-sm btn-primary mx-1" data-toggle="modal" data-target="#modalTambahData"><i class="fa fa-plus text-white"></i> Tambah Data</button>
         <button class="btn btn-sm btn-success mx-1"><i class="fa fa-print text-white"></i> Cetak Data</button>
       </div>
 
-      <div class="table-responsive-sm">
-        <table id="tableBarangReturn" class="table table-bordered table-hover table-sm text-center w-100">
-          <thead class="w-100">
+      <div class="table-responsive">
+        <table id="tableTransaction" class="table table-sm table-bordered text-center table-hover w-100">
+          <thead style="w-100">
             <tr>
-              <th>No</th>
+              <th>No.</th>
               <th>Kode Transaksi</th>
               <th>Tanggal</th>
               <th>Produk</th>
               <th>Qty</th>
-              <th>Supplier</th>
+              <th>PIC</th>
               <th>Note</th>
               <th>Action</th>
             </tr>
@@ -60,37 +59,30 @@
 
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Input Barang Return</h4>
+          <h4 class="modal-title">Input Barang Keluar</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
 
         <!-- Modal body -->
-        <form action="{{ route('return.tambah') }}" method="post">
+        <form action="{{ route('transaction.tambah') }}" method="post">
           @csrf
           <div class="modal-body">
             <div class="form-group">
-              <label for="produk">Produk</label>
-              <select name="products_id" id="produk" class="form-control" required>
+              <label for="products_id">KD Produk</label>
+              <select name="products_id" class="form-control" required>
                 <option value="">Pilih produk ...</option>
                 @foreach ($products as $product)
-                <option value="{{ $product->id }}">{{ $product->kd_produk . ' - ' . $product->nama_produk . ' - ' .
-                  $product->merk }}</option>
+                <option value="{{ $product->id }}">{{ $product->kd_produk . ' - ' . $product->nama_produk . ' - ' . $product->merk }}</option>
                 @endforeach
               </select>
             </div>
             <div class="form-group">
               <label for="qty">QTY</label>
-              <input type="number" name="qty" id="qty" placeholder="qty" class="form-control">
+              <input type="number" name="qty" placeholder="qty" class="form-control">
             </div>
             <div class="form-group">
-              <label for="supplier">Supplier</label>
-              <select name="suppliers_id" id="supplier" class="form-control" required>
-                <option value="#">Pilih supplier ...</option>
-                @foreach ($suppliers as $supplier)
-                <option value="{{ $supplier->id }}">{{ $supplier->kd_supplier . ' - ' . $supplier->nama_supplier }}
-                </option>
-                @endforeach
-              </select>
+              <label for="pic">PIC</label>
+              <input type="text" name="pic" placeholder="pic" class="form-control">
             </div>
             <div class="form-group">
               <label for="tanggal">Tanggal</label>
@@ -106,8 +98,8 @@
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             <button type="submit" class="btn btn-primary" name="submit">Simpan</button>
           </div>
-        </form>
 
+        </form>
       </div>
     </div>
   </div>
@@ -119,37 +111,31 @@
 
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Update Barang Return</h4>
+          <h4 class="modal-title">Update Barang Keluar</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
 
         <!-- Modal body -->
-        <form action="{{ route('return.update') }}" method="post">
+        <form action="{{ route('transaction.update') }}" method="post">
           @csrf
           <div class="modal-body">
             <div class="form-group">
-              <label for="produk">Produk</label>
-              <select name="products_id" id="produk" class="form-control" required>
-                <option value="#">Pilih produk ...</option>
+              <label for="products_id">KD Produk</label>
+              <select name="products_id" class="form-control" disabled>
+                <option value="">Pilih produk ...</option>
                 @foreach ($products as $product)
-                <option value="{{ $product->id }}">{{ $product->kd_produk . ' - ' . $product->nama_produk . ' - ' .
-                  $product->merk }}</option>
+                <option value="{{ $product->id }}">{{ $product->kd_produk . ' - ' . $product->nama_produk . ' - ' . $product->merk
+                  }}</option>
                 @endforeach
               </select>
             </div>
             <div class="form-group">
               <label for="qty">QTY</label>
-              <input type="number" name="qty" id="qty" placeholder="qty" class="form-control">
+              <input type="number" name="qty" placeholder="qty" class="form-control" disabled>
             </div>
             <div class="form-group">
-              <label for="supplier">Supplier</label>
-              <select name="suppliers_id" id="supplier" class="form-control" required>
-                <option value="#">Pilih supplier ...</option>
-                @foreach ($suppliers as $supplier)
-                <option value="{{ $supplier->id }}">{{ $supplier->kd_supplier . ' - ' . $supplier->nama_supplier }}
-                </option>
-                @endforeach
-              </select>
+              <label for="pic">PIC</label>
+              <input type="text" name="pic" placeholder="pic" class="form-control">
             </div>
             <div class="form-group">
               <label for="tanggal">Tanggal</label>
@@ -179,7 +165,7 @@
 
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Hapus Barang Return</h4>
+          <h4 class="modal-title">Hapus Barang Keluar</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
 
@@ -190,7 +176,7 @@
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <form action="{{ route('return.hapus') }}" method="POST">
+          <form action="{{ route('transaction.hapus') }}" method="POST">
             @csrf
             <input type="hidden" name="id" required readonly>
             <input type="hidden" name="products_id" required readonly>
