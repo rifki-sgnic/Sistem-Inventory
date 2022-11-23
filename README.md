@@ -10,10 +10,11 @@ Sistem Inventory dibuat menggunakan Laravel 9 dan Bootstrap 4
 
 ## 🛠 Installation
 - Create db name db_sisteminventory
-- use cmd/terminal/gitbash
+- Use cmd/terminal/gitbash
+- Copy and Paste .env.example then rename to .env
 
 ```bash
-#install node_modules
+#install composer package
 composer install
 
 php artisan key:generate
