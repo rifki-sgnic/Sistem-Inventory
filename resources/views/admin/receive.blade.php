@@ -55,7 +55,7 @@
 
   <!-- Modal Tambah Data -->
   <div class="modal" id="modalTambahData">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
 
         <!-- Modal Header -->
@@ -112,7 +112,7 @@
 
   <!-- Modal Ubah Data -->
   <div class="modal" id="modalUpdateData">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
 
         <!-- Modal Header -->
@@ -127,7 +127,7 @@
           <div class="modal-body">
             <div class="form-group">
               <label for="produk">Produk</label>
-              <select name="products_id" id="produk" class="form-control" required>
+              <select name="products_id" id="produk" class="form-control" disabled>
                 <option value="#">Pilih produk ...</option>
                 @foreach ($products as $product)
                 <option value="{{ $product->id }}">{{ $product->kd_produk . ' - ' . $product->nama_produk . ' - ' .
@@ -137,11 +137,11 @@
             </div>
             <div class="form-group">
               <label for="qty">QTY</label>
-              <input type="number" name="qty" id="qty" placeholder="qty" class="form-control">
+              <input type="number" name="qty" id="qty" placeholder="qty" class="form-control" disabled>
             </div>
             <div class="form-group">
               <label for="supplier">Supplier</label>
-              <select name="suppliers_id" id="supplier" class="form-control" required>
+              <select name="suppliers_id" id="supplier" class="form-control">
                 <option value="#">Pilih supplier ...</option>
                 @foreach ($suppliers as $supplier)
                 <option value="{{ $supplier->id }}">{{ $supplier->kd_supplier . ' - ' . $supplier->nama_supplier }}

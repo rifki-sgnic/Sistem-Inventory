@@ -54,7 +54,7 @@
 
   <!-- Modal Tambah Data -->
   <div class="modal" id="modalTambahData">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
 
         <!-- Modal Header -->

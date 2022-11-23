@@ -69,9 +69,9 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
 
     // Route Data Return
     Route::get('/return', [ReturnController::class, 'index'])->name('admin.return');
-    Route::post('/receive/tambah', [ReturnController::class, 'tambah'])->name('return.tambah');
-    Route::post('/receive/update', [ReturnController::class, 'update'])->name('return.update');
-    Route::post('/receive/hapus', [ReturnController::class, 'hapus'])->name('return.hapus');
+    Route::post('/return/tambah', [ReturnController::class, 'tambah'])->name('return.tambah');
+    Route::post('/return/update', [ReturnController::class, 'update'])->name('return.update');
+    Route::post('/return/hapus', [ReturnController::class, 'hapus'])->name('return.hapus');
 
     // Route Data User Management
     Route::get('/user-management', [UserController::class, 'index'])->name('admin.user-management');

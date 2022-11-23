@@ -260,7 +260,7 @@ $("#tableReceive tbody").on("click", "button", function () {
         $("#modalUpdateData").find("input[name='id']").val(data["id"]);
         $("#modalUpdateData").modal("show");
     } else if ($(this).prop("value") == "delete") {
-        $("#modalHapusData").find("p strong").html(data["id"]);
+        $("#modalHapusData").find("p strong").html(data["invoice_number"]);
         $("#modalHapusData").find("input[name='id']").val(data["id"]);
         $("#modalHapusData")
             .find("input[name='products_id']")
@@ -336,7 +336,7 @@ $("#tableTransaction tbody").on("click", "button", function () {
         $("#modalUpdateData").find("input[name='id']").val(data["id"]);
         $("#modalUpdateData").modal("show");
     } else if ($(this).prop("value") == "delete") {
-        $("#modalHapusData").find("p strong").html(data["id"]);
+        $("#modalHapusData").find("p strong").html(data["invoice_number"]);
         $("#modalHapusData").find("input[name='id']").val(data["id"]);
         $("#modalHapusData")
             .find("input[name='products_id']")
@@ -353,7 +353,88 @@ $("#tableTransaction tbody").on("click", "button", function () {
 
 /* DataTable Return [START] */
 
-    // TODO
+var tableBarangReturn = $("#tableBarangReturn").DataTable({
+    deferRender: true,
+    ajax: "/return",
+    columns: [
+        {
+            data: null,
+            render: function (data, type, full, meta) {
+                return meta.row + 1;
+            },
+        },
+        { data: "invoice_number" },
+        {
+            data: null,
+            render: function (data) {
+                return moment(data.created_at).format("DD MMMM YYYY");
+            },
+        },
+        {
+            data: null,
+            render: function (data, type, full, meta) {
+                return (
+                    data.products.kd_produk +
+                    " - " +
+                    data.products.nama_produk +
+                    " - " +
+                    data.products.type
+                );
+            },
+        },
+        { data: "qty" },
+        {
+            data: null,
+            render: function (data) {
+                return (
+                    data.suppliers.kd_supplier +
+                    " - " +
+                    data.suppliers.nama_supplier
+                );
+            },
+        },
+        { data: "note" },
+        {
+            data: null,
+            defaultContent: `
+                <button type="button" value="update" class="btn btn-sm btn-warning"><i class="fa fa-pen text-white"></i> Edit</button>
+                <button type="button" value="delete" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</button>
+                `,
+        },
+    ],
+});
+
+/* Aksi Update dan Delete dengan Modal */
+$("#tableBarangReturn tbody").on("click", "button", function () {
+    var data = tableBarangReturn.row($(this).parents("tr")).data();
+
+    if ($(this).prop("value") == "update") {
+        $("#modalUpdateData")
+            .find("select[name='products_id']")
+            .val(data["products_id"]);
+        $("#modalUpdateData").find("input[name='qty']").val(data["qty"]);
+        $("#modalUpdateData")
+            .find("select[name='suppliers_id']")
+            .val(data["suppliers_id"]);
+        $("#modalUpdateData")
+            .find("input[name='created_at']")
+            .val(moment(data["created_at"]).format("yyyy-MM-DD"));
+        $("#modalUpdateData").find("textarea[name='note']").val(data["note"]);
+
+        $("#modalUpdateData").find("input[name='id']").val(data["id"]);
+        $("#modalUpdateData").modal("show");
+    } else if ($(this).prop("value") == "delete") {
+        $("#modalHapusData").find("p strong").html(data["invoice_number"]);
+        $("#modalHapusData").find("input[name='id']").val(data["id"]);
+        $("#modalHapusData")
+            .find("input[name='products_id']")
+            .val(data["products_id"]);
+        $("#modalHapusData")
+            .find("input[name='invoice_number']")
+            .val(data["invoice_number"]);
+        $("#modalHapusData").modal("show");
+    }
+});
 
 /* DataTable Return [END] */
 

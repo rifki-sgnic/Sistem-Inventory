@@ -26,6 +26,11 @@ class Product extends Model
         return $this->hasMany(Transaction::class, 'products_id');
     }
 
+    public function return_products()
+    {
+        return $this->hasMany(Receive::class, 'products_id');
+    }
+
     public function stock_transactions()
     {
         return $this->hasMany(StockTransaction::class, 'products_id');
