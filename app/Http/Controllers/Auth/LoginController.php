@@ -60,13 +60,13 @@ class LoginController extends Controller
             if (auth()->user()->role == 'admin') {
                 return redirect()->route('admin.dashboard');
             } else if (auth()->user()->role == 'superadmin') {
-                return redirect()->route('login')->with('success', 'Masuk super');
+                return redirect()->route('superadmin.dashboard');
             } else if (auth()->user()->role == 'warehouse') {
-                return redirect()->route('login')->with('success', 'Masuk ware');
+                return redirect()->route('home');
             } else if (auth()->user()->role == 'purchasing') {
-                return redirect()->route('login')->with('success', 'Masuk purch');
+                return redirect()->route('home');
             } else {
-                return redirect()->route('login')->with('success', 'Masuk TRM');
+                return redirect()->route('home');
             }
 
         } else {

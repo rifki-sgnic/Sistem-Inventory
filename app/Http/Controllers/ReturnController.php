@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ListProduct;
 use App\Models\Product;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ class ReturnController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = ReturnProduct::with('products', 'suppliers')->get();
+            $data = ReturnProduct::with('products', 'list_products')->get();
 
             return DataTables::of($data)->make(true);
         }
@@ -23,7 +24,7 @@ class ReturnController extends Controller
         return view('admin.return', [
             'title' => 'Return',
             'products' => Product::all(),
-            'suppliers' => Supplier::all(),
+            'list_products' => ListProduct::all(),
         ]);
     }
 
@@ -33,11 +34,11 @@ class ReturnController extends Controller
             'created_at' => 'required',
             'products_id' => 'required',
             'qty' => 'required',
-            'suppliers_id' => 'required',
+            'list_products_id' => 'required',
             'note' => 'required'
         ]);
 
-        $invoice = IdGenerator::generate(['table' => 'receives', 'field' => 'invoice_number', 'length' => 8, 'prefix' => 'BR-']);
+        $invoice = IdGenerator::generate(['table' => 'return_products', 'field' => 'invoice_number', 'length' => 8, 'prefix' => 'BR-']);
 
         $input = $request->all();
         $input['invoice_number'] = $invoice;
@@ -60,7 +61,7 @@ class ReturnController extends Controller
             'created_at' => 'required',
             'products_id' => 'required',
             'qty' => 'required',
-            'suppliers_id' => 'required',
+            'list_products_id' => 'required',
             'note' => 'required'
         ]);
 

@@ -372,6 +372,13 @@ var tableBarangReturn = $("#tableBarangReturn").DataTable({
         },
         {
             data: null,
+            render: function (data) {
+                console.log(data);
+                return data.list_products.no_pre_order;
+            },
+        },
+        {
+            data: null,
             render: function (data, type, full, meta) {
                 return (
                     data.products.kd_produk +
@@ -383,16 +390,6 @@ var tableBarangReturn = $("#tableBarangReturn").DataTable({
             },
         },
         { data: "qty" },
-        {
-            data: null,
-            render: function (data) {
-                return (
-                    data.suppliers.kd_supplier +
-                    " - " +
-                    data.suppliers.nama_supplier
-                );
-            },
-        },
         { data: "note" },
         {
             data: null,

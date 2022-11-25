@@ -55,11 +55,11 @@
         <a class="collapse-item" href="{{ route('admin.receive') }}"> Data Barang Masuk</a>
         <a class="collapse-item" href="{{ route('admin.transaction') }}">Data Barang Keluar</a>
         <a class="collapse-item" href="{{ route('admin.return') }}">Return</a>
-
       </div>
     </div>
   </li>
 
+  @if (auth()->user()->role == 'admin')
   <!-- Nav Item - Utilities Collapse Menu -->
   <li class="nav-item {{ Nav::isRoute('admin.user-management') }}">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#user" aria-expanded="true"
@@ -74,7 +74,7 @@
       </div>
     </div>
   </li>
-
+  @endif
   <!-- Divider -->
   <hr class="sidebar-divider d-none d-md-block">
 

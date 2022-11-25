@@ -41,9 +41,9 @@
               <th>No</th>
               <th>Kode Transaksi</th>
               <th>Tanggal</th>
+              <th>No Pre Order</th>
               <th>Produk</th>
               <th>Qty</th>
-              <th>Supplier</th>
               <th>Note</th>
               <th>Action</th>
             </tr>
@@ -69,6 +69,16 @@
           @csrf
           <div class="modal-body">
             <div class="form-group">
+              <label for="no_pre_order">No Pre Order</label>
+              <select name="list_products_id" id="no_pre_order" class="form-control" required>
+                <option value="">Pilih no pre order ...</option>
+                @foreach ($list_products as $list_product)
+                <option value="{{ $list_product->id }}">{{ $list_product->no_pre_order }}
+                </option>
+                @endforeach
+              </select>
+            </div>
+            <div class="form-group">
               <label for="produk">Produk</label>
               <select name="products_id" id="produk" class="form-control" required>
                 <option value="">Pilih produk ...</option>
@@ -81,16 +91,6 @@
             <div class="form-group">
               <label for="qty">QTY</label>
               <input type="number" name="qty" id="qty" placeholder="qty" class="form-control">
-            </div>
-            <div class="form-group">
-              <label for="supplier">Supplier</label>
-              <select name="suppliers_id" id="supplier" class="form-control" required>
-                <option value="#">Pilih supplier ...</option>
-                @foreach ($suppliers as $supplier)
-                <option value="{{ $supplier->id }}">{{ $supplier->kd_supplier . ' - ' . $supplier->nama_supplier }}
-                </option>
-                @endforeach
-              </select>
             </div>
             <div class="form-group">
               <label for="tanggal">Tanggal</label>
@@ -128,6 +128,16 @@
           @csrf
           <div class="modal-body">
             <div class="form-group">
+              <label for="no_pre_order">No Pre Order</label>
+              <select name="list_products_id" id="no_pre_order" class="form-control" required>
+                <option value="">Pilih supplier ...</option>
+                @foreach ($list_products as $list_product)
+                <option value="{{ $list_product->id }}">{{ $list_product->no_pre_order }}
+                </option>
+                @endforeach
+              </select>
+            </div>
+            <div class="form-group">
               <label for="produk">Produk</label>
               <select name="products_id" id="produk" class="form-control" required>
                 <option value="#">Pilih produk ...</option>
@@ -140,16 +150,6 @@
             <div class="form-group">
               <label for="qty">QTY</label>
               <input type="number" name="qty" id="qty" placeholder="qty" class="form-control">
-            </div>
-            <div class="form-group">
-              <label for="supplier">Supplier</label>
-              <select name="suppliers_id" id="supplier" class="form-control" required>
-                <option value="#">Pilih supplier ...</option>
-                @foreach ($suppliers as $supplier)
-                <option value="{{ $supplier->id }}">{{ $supplier->kd_supplier . ' - ' . $supplier->nama_supplier }}
-                </option>
-                @endforeach
-              </select>
             </div>
             <div class="form-group">
               <label for="tanggal">Tanggal</label>

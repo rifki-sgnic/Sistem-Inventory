@@ -109,6 +109,7 @@
   <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
   <script src="{{ asset('js/moment-with-locales.js') }}"></script>
   <script src="{{ asset('js/pdfmake.min.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="{{ asset('js/vfs_fonts.js') }}"></script>
   <script src="{{ asset('js/ajax.js') }}"></script>
   <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>

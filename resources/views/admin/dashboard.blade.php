@@ -4,84 +4,118 @@
 <div id="content-dashboard">
   <h1 class="h3 mb-2 text-gray-800">Dashboard</h1>
   <p>{{ auth()->user()->role }}</p>
-  <div id="piechart"></div>
 
-  <!-- DataTable -->
-  <div class="card shadow mb-4">
-    <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary">Data History Transaksi</h6>
-    </div>
-    <div class="card-body">
+  <div class="row">
 
-      <nav>
-        <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-          <a class="nav-item nav-link active" id="custom-nav-a-tab" data-toggle="tab" href="#custom-nav-a" role="tab"
-            aria-controls="custom-nav-a" aria-selected="true">History Barang Masuk Hari Ini</a>
-          <a class="nav-item nav-link" id="custom-nav-b-tab" data-toggle="tab" href="#custom-nav-b" role="tab"
-            aria-controls="custom-nav-b" aria-selected="false">History Barang Keluar Hari Ini </a>
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                Data Stok Barang</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $total_stock }}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-calendar fa-2x text-gray-300"></i>
+            </div>
+          </div>
         </div>
-      </nav>
+      </div>
+    </div>
 
-      <div class="tab-content" id="nav-tabContent">
-        <div class="tab-content pl-3 pt-2" id="nav-tabContent">
-
-          <div class="tab-pane fade show active" id="custom-nav-a" role="tabpanel" aria-labelledby="custom-nav-a-tab">
-            <table style="margin-top: 20px;" id="tableBarangMasukHariIni" class="table table-hover table-bordered">
-              <thead>
-                <tr>
-                  <th>No</th>
-                  <th>Tanggal</th>
-                  <th>Rack No</th>
-                  <th>Id Produk</th>
-                  <th>Nama Produk</th>
-                  <th>Qty</th>
-                  <th>Satuan</th>
-                  <th>Status</th>
-                  <th>PIC</th>
-                  <th>Note</th>
-                </tr>
-              </thead>
-            </table>
+    <!-- Earnings (Annual) Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                Data Barang Masuk</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $total_receive }}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+            </div>
           </div>
+        </div>
+      </div>
+    </div>
 
-          <div class="tab-pane fade" id="custom-nav-b" role="tabpanel" aria-labelledby="custom-nav-b-tab">
-            <table style="margin-top: 20px;" id="tableBarangKeluarHariIni" class="table table-hover table-bordered">
-              <thead>
-                <tr>
-                  <th>No</th>
-                  <th>Tanggal</th>
-                  <th>Rack No</th>
-                  <th>Id Produk</th>
-                  <th>Nama Produk</th>
-                  <th>Qty</th>
-                  <th>Satuan</th>
-                  <th>Status</th>
-                  <th>PIC</th>
-                  <th>Note</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>No</td>
-                  <td>Tanggal</td>
-                  <td>Rack No</td>
-                  <td>ID Produk</td>
-                  <td>Nama Produk</td>
-                  <td>Qty</td>
-                  <td>Satuan</td>
-                  <td>Status</td>
-                  <td>PIC</td>
-                  <td>Note</td>
-                </tr>
-              </tbody>
-            </table>
+    <!-- Tasks Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-info shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Data Barang Keluar
+              </div>
+              <div class="row no-gutters align-items-center">
+                <div class="col-auto">
+                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ $total_transaction }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+            </div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pending Requests Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-warning shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                Data Supplier</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $total_supplier }}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-comments fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content Row -->
+
+  <div class="row">
+
+    <div class="col-xl-8 col-lg-7">
+      <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Chart Stock Barang</h6>
+        </div>
+        <!-- Card Body -->
+        <div class="card-body">
+          <div style="position: relative; width:99%; text-align: -webkit-center">
+            <canvas id="myChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pie Chart -->
+    <div class="col-xl-4 col-lg-5">
+      <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Messages</h6>
+        </div>
+        <!-- Card Body -->
+        <div id="alertstock" class="card-body" style="height: 50vh; overflow: auto">
 
         </div>
       </div>
-
     </div>
-
   </div>
 </div>
 @endsection

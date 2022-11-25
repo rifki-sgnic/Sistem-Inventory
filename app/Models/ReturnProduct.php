@@ -18,8 +18,8 @@ class ReturnProduct extends Model
         return $this->belongsTo(Product::class, 'products_id', 'id');
     }
 
-    public function suppliers()
+    public function list_products()
     {
-        return $this->belongsTo(Supplier::class, 'suppliers_id', 'id');
+        return $this->belongsTo(ListProduct::class, 'list_products_id', 'id');
     }
 }

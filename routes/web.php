@@ -36,6 +36,7 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::middleware(['auth', 'user-access:admin'])->group(function () {
     // Dashboard
     Route::get('/', [DashboardController::class, 'adminDashboard'])->name('admin.dashboard');
+    Route::get('/chart', [DashboardController::class, 'chart']);
 
     // Route Data Master Barang
     Route::get('/master', [ProductController::class, 'index'])->name('admin.master');
@@ -78,4 +79,9 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
     Route::post('/user-management/tambah', [UserController::class, 'tambah'])->name('user-management.tambah');
     Route::post('/user-management/update', [UserController::class, 'update'])->name('user-management.update');
     Route::post('/user-management/hapus', [UserController::class, 'hapus'])->name('user-management.hapus');
+});
+
+Route::middleware(['auth', 'user-access:superadmin'])->group(function () {
+    // Dashboard
+    Route::get('/superadmin', [DashboardController::class, 'adminDashboard'])->name('superadmin.dashboard');
 });
