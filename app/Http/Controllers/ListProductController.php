@@ -6,6 +6,7 @@ use App\Models\ListProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class ListProductController extends Controller
 {
@@ -30,7 +31,10 @@ class ListProductController extends Controller
             "file" => "file|max:5120",
         ]);
 
+        $invoice = IdGenerator::generate(['table' => 'receives', 'field' => 'invoice_number', 'length' => 8, 'prefix' => 'LB-']);
+
         $input = $request->all();
+        $input['invoice_number'] = $invoice;
 
         if ($request->file('file')) {
             $fileName = $request->file('file')->getClientOriginalName();
@@ -56,6 +60,11 @@ class ListProductController extends Controller
         ListProduct::whereId($request->id)->update($input);
 
         return redirect()->route('admin.list-barang')->with('success', 'Data berhasil diupdate!');
+    }
+
+    public function updateStatus(Request $request)
+    {
+        return ListProduct::whereId($request['id'])->update(['status' => $request['status']]);
     }
 
     public function hapus(Request $request)

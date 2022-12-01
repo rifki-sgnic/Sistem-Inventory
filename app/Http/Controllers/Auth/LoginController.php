@@ -57,16 +57,20 @@ class LoginController extends Controller
         if(Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            if (auth()->user()->role == 'admin') {
+            $role = auth()->user()->roles->pluck('name')->first();
+
+            if ($role == 'admin') {
                 return redirect()->route('admin.dashboard');
-            } else if (auth()->user()->role == 'superadmin') {
-                return redirect()->route('superadmin.dashboard');
-            } else if (auth()->user()->role == 'warehouse') {
+            } else if ($role == 'superadmin') {
+                return redirect()->route('admin.dashboard');
+            } else if ($role == 'warehouse') {
                 return redirect()->route('home');
-            } else if (auth()->user()->role == 'purchasing') {
+            } else if ($role == 'purchasing') {
+                return redirect()->route('home');
+            } else if ($role == 'trm') {
                 return redirect()->route('home');
             } else {
-                return redirect()->route('home');
+                abort(403);
             }
 
         } else {

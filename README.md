@@ -12,26 +12,32 @@ Sistem Inventory dibuat menggunakan Laravel 9 dan Bootstrap 4
 - Create db name db_sisteminventory
 - Use cmd/terminal/gitbash
 - Copy and Paste .env.example then rename to .env
+- add ```bash FILESYSTEM_DISK=public```  to .env
 
 ```bash
-#install composer package
+# install composer package
 composer install
 
 php artisan key:generate
 
-#insert table database
+php artisan storage:link
+
+# insert table database
 php artisan migrate
 
-#insert dummy data
+# insert dummy data
 php artisan db:seed --class=DatabaseSeeder
-php artisan db:seed --class=RoleSeeder
-php artisan db:seed --class=UserSeeder
+
+# or just do this instead
+php artisan migrate:fresh --seed
 ```
 
 ## 🚀 Usage
 - use cmd/terminal/gitbash
+- locate the project folder
 ```bash
 cd ../../inventory-deka
+
 php artisan serve
 ```
 

@@ -3,14 +3,14 @@ moment().format("L");
 
 $(document).ready(function () {
     bsCustomFileInput.init();
-    $("#tableBarangMasukHariIni").DataTable();
 });
 
 async function dataChart() {
     let data;
     const res = await fetch('/chart')
     data = await res.json();
-    // console.log(data)
+    console.log(data)
+
     length = data.length
     // console.log(length)
 
@@ -18,11 +18,11 @@ async function dataChart() {
     values = [];
 
     for (var i = 0; i < length; i++) {
-        // console.log(i)
+        // console.log(labels)
         labels.push(data[i].nama_produk);
         values.push(data[i].qty);
     }
-    // console.log(labels)
+
     const maxValue = Math.max.apply(Math, values)
 
     var colors = [];
@@ -89,9 +89,11 @@ function getAlertData() {
                 if (data[i].qty <= 5) {
                     content +=
                         `
-                        <div class="alert alert-danger" role="alert"> Stok `
-                            + data[i].nama_produk + ` tersisa ` + data[i].qty +
-                            `<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert"> Stok ` +
+                        data[i].nama_produk +
+                        ` tersisa ` +
+                        data[i].qty +
+                        `<button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
@@ -99,8 +101,9 @@ function getAlertData() {
                 } else if (data[i].qty <= 10) {
                     content +=
                         `
-                        <div class="alert alert-warning" role="alert"> Stok ` +
-                        data[i].nama_produk + ` Menipis
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert"> Stok ` +
+                        data[i].nama_produk +
+                        ` Menipis
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>

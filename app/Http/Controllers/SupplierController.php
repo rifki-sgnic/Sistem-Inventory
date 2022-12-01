@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Yajra\DataTables\Facades\DataTables;
 
 class SupplierController extends Controller
@@ -15,7 +16,7 @@ class SupplierController extends Controller
             return DataTables::of($data)->make(true);
         }
 
-        return view('admin.supplier', [
+        return view('supplier.supplier', [
             'title' => 'Supplier'
         ]);
     }
@@ -33,7 +34,7 @@ class SupplierController extends Controller
 
         Supplier::create($input);
 
-        return redirect()->route('admin.supplier')->with('success', 'Data berhasil ditambah!');
+        return redirect()->route('supplier.index')->with('success', 'Data berhasil ditambah!');
     }
 
     public function update(Request $request)
@@ -49,7 +50,7 @@ class SupplierController extends Controller
 
         Supplier::whereId($request->id)->update($input);
 
-        return redirect()->route('admin.supplier')->with('success', 'Data berhasil diupdate!');
+        return redirect()->route('supplier.index')->with('success', 'Data berhasil diupdate!');
     }
 
     public function hapus(Request $request)
@@ -60,6 +61,18 @@ class SupplierController extends Controller
 
         $data->delete();
 
-        return redirect()->route('admin.supplier')->with('success', 'Data berhasil dihapus!');
+        return redirect()->route('supplier.index')->with('success', 'Data berhasil dihapus!');
+    }
+
+    public function cetakPdf()
+    {
+        $suppliers = Supplier::all();
+
+        $pdf = Pdf::loadView('supplier.supplier_pdf', ['suppliers' => $suppliers]);
+        return $pdf->stream();
+
+        // return view('supplier.supplier_pdf', [
+        //     'suppliers' => Supplier::all(),
+        // ]);
     }
 }

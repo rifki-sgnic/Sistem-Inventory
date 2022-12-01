@@ -15,6 +15,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->call([UserRoleSeeder::class]);
+
+
         $products = [
             [
                 'kd_produk' => 'A123X',

@@ -74,14 +74,14 @@
             </div>
             <div class="form-group">
               <label for="password">Password</label>
-              <input type="text" name="password" placeholder="password" class="form-control" required>
+              <input type="password" name="password" placeholder="password" class="form-control" required>
             </div>
             <div class="form-group">
               <label for="level">Level</label>
               <select class="form-control" name="role">
                 <option>Pilih Level ...</option>
                 @foreach ($roles as $role)
-                  <option value="{{ $role->role }}">{{ $role->level }}</option>
+                  <option value="{{ $role }}">{{ $role }}</option>
                 @endforeach
               </select>
             </div>
@@ -120,14 +120,14 @@
             </div>
             <div class="form-group">
               <label for="password">Password</label>
-              <input type="text" name="password" placeholder="Password baru" class="form-control" required>
+              <input type="password" name="password" placeholder="Password baru" class="form-control">
             </div>
             <div class="form-group">
               <label for="level">Level</label>
               <select class="form-control" name="role">
                 <option>Pilih Level ...</option>
                 @foreach ($roles as $role)
-                <option value="{{ $role->role }}">{{ $role->level }}</option>
+                <option value="{{ $role }}">{{ $role }}</option>
                 @endforeach
               </select>
             </div>

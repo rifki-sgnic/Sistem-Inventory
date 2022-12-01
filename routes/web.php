@@ -32,28 +32,35 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-/* Access Level Admin */
-Route::middleware(['auth', 'user-access:admin'])->group(function () {
+/* Access Level Admin, Superadmin & Warehouse */
+Route::middleware(['role:admin|superadmin|warehouse'])->group(function () {
     // Dashboard
     Route::get('/', [DashboardController::class, 'adminDashboard'])->name('admin.dashboard');
     Route::get('/chart', [DashboardController::class, 'chart']);
+});
+
+/* Access Level Admin & SuperAdmin */
+Route::middleware(['role:admin|superadmin'])->group(function () {
 
     // Route Data Master Barang
-    Route::get('/master', [ProductController::class, 'index'])->name('admin.master');
+    Route::get('/master', [ProductController::class, 'index'])->name('master.index');
     Route::post('/master/tambah', [ProductController::class, 'tambah'])->name('master.tambah');
     Route::post('/master/update', [ProductController::class, 'update'])->name('master.update');
     Route::post('/master/hapus', [ProductController::class, 'hapus'])->name('master.hapus');
+    Route::post('/master/cetak-pdf', [ProductController::class, 'cetakPdf'])->name('master.cetak');
 
     // Route Data Supplier
-    Route::get('/supplier', [SupplierController::class, 'index'])->name('admin.supplier');
+    Route::get('/supplier', [SupplierController::class, 'index'])->name('supplier.index');
     Route::post('/supplier/tambah', [SupplierController::class, 'tambah'])->name('supplier.tambah');
     Route::post('/supplier/update', [SupplierController::class, 'update'])->name('supplier.update');
     Route::post('/supplier/hapus', [SupplierController::class, 'hapus'])->name('supplier.hapus');
+    Route::get('/supplier/cetak-pdf', [SupplierController::class, 'cetakPdf'])->name('supplier.cetak');
 
     // Route Data List Barang
     Route::get('/list-barang', [ListProductController::class, 'index'])->name('admin.list-barang');
     Route::post('/list-barang/tambah', [ListProductController::class, 'tambah'])->name('list-barang.tambah');
     Route::post('/list-barang/update', [ListProductController::class, 'update'])->name('list-barang.update');
+    Route::post('/list-barang', [ListProductController::class, 'updateStatus']);
     Route::post('/list-barang/hapus', [ListProductController::class, 'hapus'])->name('list-barang.hapus');
 
     // Route Data Barang Masuk
@@ -73,7 +80,10 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
     Route::post('/return/tambah', [ReturnController::class, 'tambah'])->name('return.tambah');
     Route::post('/return/update', [ReturnController::class, 'update'])->name('return.update');
     Route::post('/return/hapus', [ReturnController::class, 'hapus'])->name('return.hapus');
+});
 
+/* Access Level Admin */
+Route::middleware(['role:admin'])->group(function () {
     // Route Data User Management
     Route::get('/user-management', [UserController::class, 'index'])->name('admin.user-management');
     Route::post('/user-management/tambah', [UserController::class, 'tambah'])->name('user-management.tambah');
@@ -81,7 +91,4 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
     Route::post('/user-management/hapus', [UserController::class, 'hapus'])->name('user-management.hapus');
 });
 
-Route::middleware(['auth', 'user-access:superadmin'])->group(function () {
-    // Dashboard
-    Route::get('/superadmin', [DashboardController::class, 'adminDashboard'])->name('superadmin.dashboard');
-});
+

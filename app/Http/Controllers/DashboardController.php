@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Receive;
 use App\Models\Supplier;
 use App\Models\Transaction;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -33,6 +34,8 @@ class DashboardController extends Controller
 
     public function chart()
     {
-        return Product::select('nama_produk', 'qty')->get();
+        return Product::select('nama_produk', DB::raw('SUM(qty) as qty'))
+                ->groupBy('nama_produk')
+                ->get();
     }
 }

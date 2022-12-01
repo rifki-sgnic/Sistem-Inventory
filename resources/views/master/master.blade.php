@@ -11,25 +11,28 @@
     <div class="card-body">
 
       @if ($message = session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-          {{ $message }}
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ $message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
       @elseif($errors->any())
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-          @endforeach
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
       @endif
 
       <div class="d-flex flex-row mb-3">
-        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalTambahData"><i class="fa fa-plus text-white"></i> Tambah Data</button>
+        <button class="btn btn-sm btn-primary mx-1" data-toggle="modal" data-target="#modalTambahData"><i
+            class="fa fa-plus text-white"></i> Tambah Data</button>
+        <button class="btn btn-sm btn-success mx-1" data-toggle="modal" data-target="#modalCetakData"><i
+            class="fa fa-print text-white"></i> Cetak Data</button>
       </div>
 
       <div class="table-responsive-sm">
@@ -169,6 +172,60 @@
             <button type="submit" class="btn btn-primary">Hapus</button>
           </form>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- The Modal -->
+  <div class="modal" id="modalCetakData">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Cetak PDF</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <form action="{{ route('master.cetak') }}" method="post">
+          <div class="modal-body">
+            @csrf
+            <div class="form-group row align-items-center">
+              <label for="nama_produk" class="col-sm-4 col-form-label">Nama Produk</label>
+              <div>:</div>
+              <div class="col-sm-5">
+                <select id="nama_produk" name="nama_produk" class="form-control">
+                  <option value="">All Item</option>
+                  @foreach ($products as $product)
+                  <option value="{{ $product->nama_produk }}">{{ $product->nama_produk }}</option>
+                  @endforeach
+                </select>
+              </div>
+            </div>
+            <div class="form-group row align-items-center">
+              <label for="start_date" class="col-sm-4 col-form-label">Dari Tanggal</label>
+              <div>:</div>
+              <div class="col-sm-5">
+                <input type="date" name="start_date" id="start_date" class="form-control" required>
+              </div>
+            </div>
+            <div class="form-group row align-items-center">
+              <label for="end_date" class="col-sm-4 col-form-label">Sampai Tanggal</label>
+              <div>:</div>
+              <div class="col-sm-5">
+                <input type="date" name="end_date" id="end_date" class="form-control" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            {{-- <a href="" class="btn btn-primary">Cetak Data</a> --}}
+            <button type="submit" class="btn btn-primary" name="submit">Cetak Data</button>
+          </div>
+        </form>
+
       </div>
     </div>
   </div>

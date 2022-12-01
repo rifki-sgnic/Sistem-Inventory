@@ -28,7 +28,7 @@
   </div>
 
   <!-- Nav Item - Pages Collapse Menu -->
-  <li class="nav-item {{ Nav::isRoute('admin.master') }} {{ Nav::isRoute('admin.supplier') }}">
+  <li class="nav-item {{ Nav::isRoute('master.index') }} {{ Nav::isRoute('supplier.index') }}">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#master" aria-expanded="true"
       aria-controls="collapsePages">
       <i class="fas fa-fw fa-wrench"></i>
@@ -36,8 +36,8 @@
     </a>
     <div id="master" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
-        <a class="collapse-item" href="{{ route('admin.master') }}">Data Master Barang</a>
-        <a class="collapse-item" href="{{ route('admin.supplier') }}">Data Supplier</a>
+        <a class="collapse-item" href="{{ route('master.index') }}">Data Master Barang</a>
+        <a class="collapse-item" href="{{ route('supplier.index') }}">Data Supplier</a>
       </div>
     </div>
   </li>
@@ -59,7 +59,7 @@
     </div>
   </li>
 
-  @if (auth()->user()->role == 'admin')
+  @role ('admin')
   <!-- Nav Item - Utilities Collapse Menu -->
   <li class="nav-item {{ Nav::isRoute('admin.user-management') }}">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#user" aria-expanded="true"
@@ -74,7 +74,7 @@
       </div>
     </div>
   </li>
-  @endif
+  @endrole
   <!-- Divider -->
   <hr class="sidebar-divider d-none d-md-block">
 

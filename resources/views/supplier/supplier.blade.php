@@ -32,7 +32,7 @@
 
       <div class="d-flex flex-row mb-3">
         <button class="btn btn-sm btn-primary mx-1" data-toggle="modal" data-target="#modalTambahData"><i class="fa fa-plus text-white"></i> Tambah Data</button>
-        <button class="btn btn-sm btn-success mx-1"><i class="fa fa-print text-white"></i> Cetak Data</button>
+        <button class="btn btn-sm btn-success mx-1" data-toggle="modal" data-target="#modalCetakData"><i class="fa fa-print text-white"></i> Cetak Data</button>
       </div>
 
       <div class="table-responsive-sm">
@@ -160,6 +160,30 @@
             <input type="hidden" name="id" required readonly>
             <button type="submit" class="btn btn-primary">Hapus</button>
           </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Hapus Data -->
+  <div class="modal" id="modalCetakData">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Cetak Data Supplier</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p class="my-2">Cetak seluruh data supplier?</p>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <a class="btn btn-primary" href="{{ route('supplier.cetak') }}">Cetak PDF</a>
         </div>
       </div>
     </div>

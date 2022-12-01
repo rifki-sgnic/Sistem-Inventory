@@ -131,7 +131,7 @@
             </div>
             <div class="form-group">
               <label for="status">Status</label>
-              <select name="status" id="status" class="form-control" required>
+              <select name="status" id="status" class="form-control">
                 <option value="">Pilih Status ...</option>
                 <option value="receive">Receive</option>
                 <option value="indend">Indend</option>

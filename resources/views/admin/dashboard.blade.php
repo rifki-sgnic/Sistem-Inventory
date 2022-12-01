@@ -3,7 +3,7 @@
 @section('main-content')
 <div id="content-dashboard">
   <h1 class="h3 mb-2 text-gray-800">Dashboard</h1>
-  <p>{{ auth()->user()->role }}</p>
+  <p>Welcome, {{ auth()->user()->roles->pluck('name')->first() }}</p>
 
   <div class="row">
 

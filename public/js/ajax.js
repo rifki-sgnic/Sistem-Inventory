@@ -114,7 +114,7 @@ var tableListBarang = $("#tableListBarang").DataTable({
                 return meta.row + 1;
             },
         },
-        { data: "id" },
+        { data: "invoice_number" },
         {
             data: null,
             render: function (data) {
@@ -125,7 +125,7 @@ var tableListBarang = $("#tableListBarang").DataTable({
         { data: "no_pre_order" },
         {
             data: null,
-            render: function(data, type, full, meta) {
+            render: function (data, type, full, meta) {
                 return (
                     '<a href="storage/post-pdf/' +
                     data.file +
@@ -133,19 +133,21 @@ var tableListBarang = $("#tableListBarang").DataTable({
                     data.file +
                     "</a>"
                 );
-            }
+            },
         },
         {
             data: null,
-            render: function(data, type, full, meta) {
-                if(data.status == 'receive') {
-                    return '<span class="btn btn-sm btn-success disabled">Receive</span>'
-                } else if (data.status == 'indend') {
+            render: function (data, type, full, meta) {
+                if (data.status == "receive") {
+                    return '<span class="btn btn-sm btn-success disabled">Receive</span>';
+                } else if (data.status == "indend") {
                     return '<span class="btn btn-sm btn-primary disabled">Indend</span>';
                 } else {
-                    return '<button type="button" value="add_status" class="btn btn-sm btn-primary"><i class="fa fa-plus text-white"></i></button>';
+                    return `<div id="add">
+                    <button type="button" id="add_status" value="add_status" class="btn btn-sm btn-primary"><i class="fa fa-plus text-white"></i></button>
+                    </div>`;
                 }
-            }
+            },
         },
         {
             data: null,
@@ -178,15 +180,54 @@ $("#tableListBarang tbody").on("click", "button", function () {
     } else if ($(this).prop("value") == "delete") {
         $("#modalHapusData").find("p strong").html(data["no_request_product"]);
 
-        $("#modalHapusData").find("input[name='id']").val(data["id"]);
+        $("#modalHapusData")
+            .find("input[name='id']")
+            .val(data["invoice_number"]);
         $("#modalHapusData").modal("show");
     } else if ($(this).prop("value") == "add_status") {
-        alert('To Do')
+        $("#add_status").remove();
+
+        var value = ["", "Receive", "Indend"];
+        var parent = $("#tableListBarang tbody tr td #add");
+
+        const select = document.createElement("select");
+        select.id = "status";
+        select.name = "status";
+        select.className = "custom-select";
+
+        const options = value.map((status) => {
+            const val = status.toLocaleLowerCase();
+            return `<option value="${val}">${status}</option>`;
+        });
+        select.innerHTML = options;
+        parent.append(select);
     }
 });
 
-/* DataTable List Product [END] */
+/* Aksi Update Status dengan Selected Option */
+$("#tableListBarang tbody").on("change", 'select[name="status"]', function () {
+    var data = tableListBarang.row($(this).parents("tr")).data();
+    id = data["id"];
+    value = $(this).find(":selected").val();
+    console.log(value);
 
+    $.ajax({
+        url: "/list-barang",
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+        data: { id: id, status: value },
+        type: "POST",
+        success: function (response) {
+            console.log(response);
+        },
+        error: function (x) {
+            console.log(x.responseText);
+        },
+    });
+});
+
+/* DataTable List Product [END] */
 
 /* DataTable Receive [START] */
 var tableReceive = $("#tableReceive").DataTable({
@@ -274,7 +315,6 @@ $("#tableReceive tbody").on("click", "button", function () {
 
 /* DataTable Receive [END] */
 
-
 /* DataTable Transaction [START] */
 var tableTransaction = $("#tableTransaction").DataTable({
     deferRender: true,
@@ -347,7 +387,6 @@ $("#tableTransaction tbody").on("click", "button", function () {
         $("#modalHapusData").modal("show");
     }
 });
-
 
 /* DataTable Transaction [END] */
 
@@ -448,7 +487,12 @@ var tableUserData = $("#tableUserData").DataTable({
         },
         { data: "name" },
         { data: "username" },
-        { data: "role" },
+        {
+            data: null,
+            render: function (data) {
+                return data.roles[0].name;
+            },
+        },
         {
             data: null,
             defaultContent: `
@@ -468,7 +512,9 @@ $("#tableUserData tbody").on("click", "button", function () {
         $("#modalUpdateData")
             .find("input[name='username']")
             .val(data["username"]);
-        $("#modalUpdateData").find("select[name='role']").val(data["role"]);
+        $("#modalUpdateData")
+            .find("select[name='role']")
+            .val(data.roles[0].name);
         $("#modalUpdateData").find("input[name='id']").val(data["id"]);
         $("#modalUpdateData").modal("show");
     } else if ($(this).prop("value") == "delete") {
