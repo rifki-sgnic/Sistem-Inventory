@@ -12,7 +12,7 @@ Sistem Inventory dibuat menggunakan Laravel 9 dan Bootstrap 4
 - Create db name db_sisteminventory
 - Use cmd/terminal/gitbash
 - Copy and Paste .env.example then rename to .env
-- add ```bash FILESYSTEM_DISK=public```  to .env
+- add ```FILESYSTEM_DISK=public```  to .env
 
 ```bash
 # install composer package
