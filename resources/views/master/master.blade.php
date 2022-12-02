@@ -197,8 +197,8 @@
               <div class="col-sm-5">
                 <select id="nama_produk" name="nama_produk" class="form-control">
                   <option value="">All Item</option>
-                  @foreach ($products as $product)
-                  <option value="{{ $product->nama_produk }}">{{ $product->nama_produk }}</option>
+                  @foreach ($product_names as $product_name)
+                  <option value="{{ $product_name->nama_produk }}">{{ $product_name->nama_produk }}</option>
                   @endforeach
                 </select>
               </div>

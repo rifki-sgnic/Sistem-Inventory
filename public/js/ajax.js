@@ -143,17 +143,17 @@ var tableListBarang = $("#tableListBarang").DataTable({
                 } else if (data.status == "indend") {
                     return '<span class="btn btn-sm btn-primary disabled">Indend</span>';
                 } else {
-                    return `<div id="add">
+                    return `<div id="add" class="d-flex justify-content-center">
                     <button type="button" id="add_status" value="add_status" class="btn btn-sm btn-primary"><i class="fa fa-plus text-white"></i></button>
                     </div>`;
                 }
             },
         },
         {
-            data: null,
+            data: "action",
             defaultContent: `
-                <button type="button" value="update" class="btn btn-sm btn-warning"><i class="fa fa-pen text-white"></i> Edit</button>
-                <button type="button" value="delete" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</button>
+                <button type="button" value="update" class="btn btn-sm btn-warning" disabled><i class="fa fa-pen text-white"></i> Edit</button>
+                <button type="button" value="delete" class="btn btn-sm btn-danger" disabled><i class="fa fa-trash"></i> Delete</button>
                 `,
         },
     ],
@@ -185,7 +185,7 @@ $("#tableListBarang tbody").on("click", "button", function () {
             .val(data["invoice_number"]);
         $("#modalHapusData").modal("show");
     } else if ($(this).prop("value") == "add_status") {
-        $("#add_status").remove();
+        $("#add_status").hide();
 
         var value = ["", "Receive", "Indend"];
         var parent = $("#tableListBarang tbody tr td #add");
@@ -201,6 +201,18 @@ $("#tableListBarang tbody").on("click", "button", function () {
         });
         select.innerHTML = options;
         parent.append(select);
+
+        const closeBtn = document.createElement("button")
+        closeBtn.id = "close_btn"
+        closeBtn.value = "close_btn"
+        closeBtn.className = "btn btn-sm btn-danger";
+        closeBtn.innerHTML = `<i class="fa fa-times text-white"></i>`;
+
+        parent.append(closeBtn);
+    } else if ($(this).prop("value") == "close_btn") {
+        $("#status").remove()
+        $("#close_btn").remove()
+        $("#add_status").show()
     }
 });
 

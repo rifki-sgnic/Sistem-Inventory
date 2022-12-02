@@ -20,6 +20,7 @@ class ProductController extends Controller
         return view('master.master', [
             'title' => 'Master Barang',
             'products' => Product::all(),
+            'product_names' => Product::select('nama_produk')->groupBy('nama_produk')->get(),
         ]);
     }
 

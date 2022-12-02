@@ -8,24 +8,25 @@
     <div class="sidebar-brand-text mx-3">Inventory<sup>App</sup></div>
   </a>
 
+  @hasrole('admin|superadmin')
   <!-- Divider -->
   <hr class="sidebar-divider my-0">
 
   <!-- Nav Item - Dashboard -->
-  <li class="nav-item {{ Nav::isRoute('admin.dashboard') }}">
-    <a class="nav-link" href="{{ route('admin.dashboard') }}">
+  <li class="nav-item {{ Nav::isRoute('dashboard') }}">
+    <a class="nav-link" href="{{ route('dashboard') }}">
       <i class="fas fa-fw fa-tachometer-alt"></i>
       <span>{{ __('Dashboard') }}</span>
     </a>
   </li>
 
   <!-- Divider -->
-  <hr class="sidebar-divider">
+  <hr class="sidebar-divider my-0">
 
   <!-- Heading -->
-  <div class="sidebar-heading">
+  {{-- <div class="sidebar-heading">
     {{ __('Interface') }}
-  </div>
+  </div> --}}
 
   <!-- Nav Item - Pages Collapse Menu -->
   <li class="nav-item {{ Nav::isRoute('master.index') }} {{ Nav::isRoute('supplier.index') }}">
@@ -41,9 +42,10 @@
       </div>
     </div>
   </li>
+  @endhasrole
 
-  <hr class="sidebar-divider">
-  <li class="nav-item {{ Nav::isRoute('admin.list-barang') }} {{ Nav::isRoute('admin.receive') }} {{ Nav::isRoute('admin.transaction') }} {{ Nav::isRoute('admin.return') }}">
+  <hr class="sidebar-divider my-0">
+  <li class="nav-item {{ Nav::isRoute('list-barang.index') }} {{ Nav::isRoute('receive.index') }} {{ Nav::isRoute('transaction.index') }} {{ Nav::isRoute('admin.return') }}">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#outgoing" aria-expanded="true"
       aria-controls="collapsePages">
       <i class="fas fa-fw fa-truck"></i>
@@ -51,9 +53,9 @@
     </a>
     <div id="outgoing" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
-        <a class="collapse-item" href="{{ route('admin.list-barang') }}"> List Barang</a>
-        <a class="collapse-item" href="{{ route('admin.receive') }}"> Data Barang Masuk</a>
-        <a class="collapse-item" href="{{ route('admin.transaction') }}">Data Barang Keluar</a>
+        <a class="collapse-item" href="{{ route('list-barang.index') }}"> List Penerimaan Barang</a>
+        <a class="collapse-item" href="{{ route('receive.index') }}"> Data Barang Masuk</a>
+        <a class="collapse-item" href="{{ route('transaction.index') }}">Data Barang Keluar</a>
         <a class="collapse-item" href="{{ route('admin.return') }}">Return</a>
       </div>
     </div>

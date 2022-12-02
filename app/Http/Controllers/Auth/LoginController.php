@@ -60,15 +60,15 @@ class LoginController extends Controller
             $role = auth()->user()->roles->pluck('name')->first();
 
             if ($role == 'admin') {
-                return redirect()->route('admin.dashboard');
+                return redirect()->route('dashboard');
             } else if ($role == 'superadmin') {
-                return redirect()->route('admin.dashboard');
+                return redirect()->route('dashboard');
             } else if ($role == 'warehouse') {
-                return redirect()->route('home');
+                return redirect()->route('list-barang.index');
             } else if ($role == 'purchasing') {
-                return redirect()->route('home');
+                return redirect()->route('list-barang.index');
             } else if ($role == 'trm') {
-                return redirect()->route('home');
+                return redirect()->route('list-barang.index');
             } else {
                 abort(403);
             }

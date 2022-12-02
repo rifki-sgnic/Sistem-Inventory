@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Product;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\StockTransaction;
 use Yajra\DataTables\Facades\DataTables;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
@@ -19,9 +21,10 @@ class TransactionController extends Controller
             return DataTables::of($data)->make(true);
         }
 
-        return view('admin.transaction', [
+        return view('transaction.transaction', [
             'title' => 'Barang Keluar',
             'products' => Product::all(),
+            'product_names' => Product::select('nama_produk')->groupBy('nama_produk')->get(),
         ]);
     }
 
@@ -32,24 +35,30 @@ class TransactionController extends Controller
             'products_id' => 'required',
             'qty' => 'required',
             'pic' => 'required',
-            'note' => 'required'
         ]);
-
-        $invoice = IdGenerator::generate(['table' => 'transactions', 'field' => 'invoice_number', 'length' => 8, 'prefix' => 'BK-']);
 
         $input = $request->all();
-        $input['invoice_number'] = $invoice;
-        Transaction::create($input);
-        StockTransaction::create([
-            'invoice_number' => $input['invoice_number'],
-            'products_id' => $input['products_id'],
-            'qty' => $input['qty'],
-        ]);
 
-        $stock = StockTransaction::where('invoice_number', $input['invoice_number'])->get()->first();
-        Product::where('id', $input['products_id'])->decrement('qty', $stock->qty);
+        $prod_qty = Product::select('qty')->where('id', $input['products_id'])->get()->first();
 
-        return redirect()->route('admin.transaction')->with('success', 'Data berhasil ditambah!');
+        if ($input['qty'] > $prod_qty->qty) {
+            return redirect()->route('transaction.index')->with('error', 'Jumlah produk melebihi batas! Produk tersisa '. $prod_qty->qty);
+        } else {
+            $invoice = IdGenerator::generate(['table' => 'transactions', 'field' => 'invoice_number', 'length' => 8, 'prefix' => 'BK-']);
+            $input['invoice_number'] = $invoice;
+
+            Transaction::create($input);
+            StockTransaction::create([
+                'invoice_number' => $input['invoice_number'],
+                'products_id' => $input['products_id'],
+                'qty' => $input['qty'],
+            ]);
+
+            $stock = StockTransaction::where('invoice_number', $input['invoice_number'])->get()->first();
+            Product::where('id', $input['products_id'])->decrement('qty', $stock->qty);
+
+            return redirect()->route('transaction.index')->with('success', 'Data berhasil ditambah!');
+        }
     }
 
     public function update(Request $request)
@@ -63,7 +72,7 @@ class TransactionController extends Controller
         $input = $request->except(['_token', 'submit']);
 
         Transaction::whereId($request->id)->update($input);
-        return redirect()->route('admin.transaction')->with('success', 'Data berhasil diupdate!');
+        return redirect()->route('transaction.index')->with('success', 'Data berhasil diupdate!');
     }
 
     public function hapus(Request $request)
@@ -81,6 +90,33 @@ class TransactionController extends Controller
 
         $data->delete();
 
-        return redirect()->route('admin.transaction')->with('success', 'Data berhasil dihapus!');
+        return redirect()->route('transaction.index')->with('success', 'Data berhasil dihapus!');
+    }
+
+    public function cetakPdf(Request $request)
+    {
+        $startDate = Carbon::createFromFormat('Y-m-d H', $request['start_date'] . '0')->startOfDay()->toDateTimeString();
+        $endDate = Carbon::createFromFormat('Y-m-d H', $request['end_date'] . '23')->endOfDay()->toDateTimeString();
+
+        if (!$request['nama_produk']) {
+            /* All Product */
+            $result = Transaction::with('products')->whereBetween('created_at', [$startDate, $endDate])->get();
+        } else {
+            /* Selected Product */
+            $result = Transaction::with('products')
+            ->whereRelation('products', 'nama_produk', '=', $request['nama_produk'])
+            ->where([
+                ['created_at', '>=', $startDate],
+                ['created_at', '<=', $endDate]
+            ])->get();
+        }
+
+        $pdf = Pdf::loadView('transaction.transaction_pdf', [
+            'transactions' => $result,
+            'startDate' => Carbon::parse($startDate)->isoFormat('DD MMMM YYYY'),
+            'endDate' => Carbon::parse($endDate)->isoFormat('DD MMMM YYYY'),
+        ]);
+
+        return $pdf->stream();
     }
 }

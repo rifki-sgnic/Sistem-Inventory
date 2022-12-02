@@ -32,15 +32,18 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
+Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
 /* Access Level Admin, Superadmin & Warehouse */
-Route::middleware(['role:admin|superadmin|warehouse'])->group(function () {
-    // Dashboard
-    Route::get('/', [DashboardController::class, 'adminDashboard'])->name('admin.dashboard');
-    Route::get('/chart', [DashboardController::class, 'chart']);
-});
+// Route::middleware(['role:admin|superadmin'])->group(function () {
+//     // Dashboard
+// });
 
 /* Access Level Admin & SuperAdmin */
 Route::middleware(['role:admin|superadmin'])->group(function () {
+
+    //Chart
+    Route::get('/chart', [DashboardController::class, 'chart']);
 
     // Route Data Master Barang
     Route::get('/master', [ProductController::class, 'index'])->name('master.index');
@@ -56,24 +59,19 @@ Route::middleware(['role:admin|superadmin'])->group(function () {
     Route::post('/supplier/hapus', [SupplierController::class, 'hapus'])->name('supplier.hapus');
     Route::get('/supplier/cetak-pdf', [SupplierController::class, 'cetakPdf'])->name('supplier.cetak');
 
-    // Route Data List Barang
-    Route::get('/list-barang', [ListProductController::class, 'index'])->name('admin.list-barang');
-    Route::post('/list-barang/tambah', [ListProductController::class, 'tambah'])->name('list-barang.tambah');
-    Route::post('/list-barang/update', [ListProductController::class, 'update'])->name('list-barang.update');
-    Route::post('/list-barang', [ListProductController::class, 'updateStatus']);
-    Route::post('/list-barang/hapus', [ListProductController::class, 'hapus'])->name('list-barang.hapus');
-
     // Route Data Barang Masuk
-    Route::get('/receive', [ReceiveController::class, 'index'])->name('admin.receive');
+    Route::get('/receive', [ReceiveController::class, 'index'])->name('receive.index');
     Route::post('/receive/tambah', [ReceiveController::class, 'tambah'])->name('receive.tambah');
     Route::post('/receive/update', [ReceiveController::class, 'update'])->name('receive.update');
     Route::post('/receive/hapus', [ReceiveController::class, 'hapus'])->name('receive.hapus');
+    Route::post('/receive/cetak-pdf', [ReceiveController::class, 'cetakPdf'])->name('receive.cetak');
 
     // Route Data Barang Keluar
-    Route::get('/transaction', [TransactionController::class, 'index'])->name('admin.transaction');
+    Route::get('/transaction', [TransactionController::class, 'index'])->name('transaction.index');
     Route::post('/transaction/tambah', [TransactionController::class, 'tambah'])->name('transaction.tambah');
     Route::post('/transaction/update', [TransactionController::class, 'update'])->name('transaction.update');
     Route::post('/transaction/hapus', [TransactionController::class, 'hapus'])->name('transaction.hapus');
+    Route::post('/transaction/cetak-pdf', [TransactionController::class, 'cetakPdf'])->name('transaction.cetak');
 
     // Route Data Return
     Route::get('/return', [ReturnController::class, 'index'])->name('admin.return');
@@ -91,4 +89,12 @@ Route::middleware(['role:admin'])->group(function () {
     Route::post('/user-management/hapus', [UserController::class, 'hapus'])->name('user-management.hapus');
 });
 
-
+Route::middleware(['role:admin|superadmin|warehouse|purchasing|trm'])->group(function () {
+    // Route Data List Barang
+    Route::get('/list-barang', [ListProductController::class, 'index'])->name('list-barang.index');
+    Route::post('/list-barang/tambah', [ListProductController::class, 'tambah'])->name('list-barang.tambah');
+    Route::post('/list-barang/update', [ListProductController::class, 'update'])->name('list-barang.update');
+    Route::post('/list-barang', [ListProductController::class, 'updateStatus']);
+    Route::post('/list-barang/hapus', [ListProductController::class, 'hapus'])->name('list-barang.hapus');
+    Route::post('/list-barang/cetak-pdf', [ListProductController::class, 'cetakPdf'])->name('list-barang.cetak');
+});

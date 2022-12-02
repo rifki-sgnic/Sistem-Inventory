@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Receive;
 use App\Models\Supplier;
 use App\Models\Transaction;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -16,20 +17,26 @@ class DashboardController extends Controller
         $this->middleware('auth');
     }
 
-    public function adminDashboard()
+    public function index()
     {
-        $data_stock = Product::sum('qty');
-        $data_receive = Receive::sum('qty');
-        $data_transaction = Transaction::sum('qty');
-        $data_supplier = Supplier::count('id');
+        $role = auth()->user()->roles->pluck('name')->first();
 
-        return view('admin.dashboard', [
-            'title' => 'Admin Dashboard',
-            'total_stock' => $data_stock,
-            'total_receive' => $data_receive,
-            'total_transaction' => $data_transaction,
-            'total_supplier' => $data_supplier,
-        ]);
+        if ($role == 'admin' || $role == 'superadmin') {
+            $data_stock = Product::sum('qty');
+            $data_receive = Receive::sum('qty');
+            $data_transaction = Transaction::sum('qty');
+            $data_supplier = Supplier::count('id');
+
+            return view('dashboard', [
+                'title' => 'Admin Dashboard',
+                'total_stock' => $data_stock,
+                'total_receive' => $data_receive,
+                'total_transaction' => $data_transaction,
+                'total_supplier' => $data_supplier,
+            ]);
+        } else {
+            return redirect()->route('list-barang.index');
+        }
     }
 
     public function chart()
