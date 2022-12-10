@@ -6,7 +6,6 @@ use App\Models\Product;
 use App\Models\Receive;
 use App\Models\Supplier;
 use App\Models\Transaction;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller

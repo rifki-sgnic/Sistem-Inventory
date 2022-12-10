@@ -28,11 +28,13 @@
       </div>
       @endif
 
+      @hasrole('admin|superadmin')
       <div class="d-flex flex-row mb-3">
         <button class="btn btn-sm btn-primary mx-1" data-toggle="modal" data-target="#modalTambahData"><i
             class="fa fa-plus text-white"></i> Tambah Data</button>
         <button class="btn btn-sm btn-success mx-1" data-toggle="modal" data-target="#modalCetakData"><i class="fa fa-print text-white"></i> Cetak Data</button>
       </div>
+      @endhasrole
 
       <div class="table-responsive-sm">
         <table id="tableListBarang" class="table table-bordered text-center table-hover w-100 table-sm">
@@ -202,6 +204,17 @@
         <form action="{{ route('list-barang.cetak') }}" method="post">
           <div class="modal-body">
             @csrf
+            <div class="form-group row align-items-center">
+              <label for="status" class="col-sm-4 col-form-label">Nama Produk</label>
+              <div>:</div>
+              <div class="col-sm-5">
+                <select id="status" name="status" class="form-control">
+                  <option value="">All Status</option>
+                  <option value="receive">Receive</option>
+                  <option value="indend">Indend</option>
+                </select>
+              </div>
+            </div>
             <div class="form-group row align-items-center">
               <label for="start_date" class="col-sm-4 col-form-label">Dari Tanggal</label>
               <div>:</div>

@@ -45,7 +45,7 @@
   @endhasrole
 
   <hr class="sidebar-divider my-0">
-  <li class="nav-item {{ Nav::isRoute('list-barang.index') }} {{ Nav::isRoute('receive.index') }} {{ Nav::isRoute('transaction.index') }} {{ Nav::isRoute('admin.return') }}">
+  <li class="nav-item {{ Nav::isRoute('list-barang.index') }} {{ Nav::isRoute('receive.index') }} {{ Nav::isRoute('transaction.index') }} {{ Nav::isRoute('return.index') }}">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#outgoing" aria-expanded="true"
       aria-controls="collapsePages">
       <i class="fas fa-fw fa-truck"></i>
@@ -54,12 +54,19 @@
     <div id="outgoing" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
         <a class="collapse-item" href="{{ route('list-barang.index') }}"> List Penerimaan Barang</a>
+        @hasrole('admin|superadmin')
         <a class="collapse-item" href="{{ route('receive.index') }}"> Data Barang Masuk</a>
         <a class="collapse-item" href="{{ route('transaction.index') }}">Data Barang Keluar</a>
-        <a class="collapse-item" href="{{ route('admin.return') }}">Return</a>
+        @endhasrole
+        @hasrole('admin|superadmin|trm')
+        <a class="collapse-item" href="{{ route('return.index') }}">Return</a>
+        @endhasrole
       </div>
     </div>
   </li>
+
+  <!-- Divider -->
+  <hr class="sidebar-divider my-0">
 
   @role ('admin')
   <!-- Nav Item - Utilities Collapse Menu -->

@@ -135,26 +135,25 @@ var tableListBarang = $("#tableListBarang").DataTable({
                 );
             },
         },
-        {
-            data: null,
-            render: function (data, type, full, meta) {
-                if (data.status == "receive") {
-                    return '<span class="btn btn-sm btn-success disabled">Receive</span>';
-                } else if (data.status == "indend") {
-                    return '<span class="btn btn-sm btn-primary disabled">Indend</span>';
-                } else {
-                    return `<div id="add" class="d-flex justify-content-center">
-                    <button type="button" id="add_status" value="add_status" class="btn btn-sm btn-primary"><i class="fa fa-plus text-white"></i></button>
-                    </div>`;
-                }
-            },
-        },
+        { data: "status" },
         {
             data: "action",
             defaultContent: `
                 <button type="button" value="update" class="btn btn-sm btn-warning" disabled><i class="fa fa-pen text-white"></i> Edit</button>
                 <button type="button" value="delete" class="btn btn-sm btn-danger" disabled><i class="fa fa-trash"></i> Delete</button>
                 `,
+        },
+    ],
+    columnDefs: [
+        {
+            targets: [7],
+            render: function (data, type, row, meta) {
+                if (row.action != undefined) {
+                    return row.action;
+                } else {
+                    tableListBarang.columns([7]).visible(false);
+                }
+            },
         },
     ],
 });
@@ -170,7 +169,9 @@ $("#tableListBarang tbody").on("click", "button", function () {
         $("#modalUpdateData")
             .find("input[name='no_pre_order']")
             .val(data["no_pre_order"]);
-        $("#modalUpdateData").find("select[name='status']").val(data["status"]);
+        $("#modalUpdateData")
+            .find("select[name='status']")
+            .val($(data["status"]).text().toLowerCase().trim());
         $("#modalUpdateData")
             .find("input[name='created_at']")
             .val(moment(data["created_at"]).format("yyyy-MM-DD"));
@@ -180,39 +181,141 @@ $("#tableListBarang tbody").on("click", "button", function () {
     } else if ($(this).prop("value") == "delete") {
         $("#modalHapusData").find("p strong").html(data["no_request_product"]);
 
-        $("#modalHapusData")
-            .find("input[name='id']")
-            .val(data["invoice_number"]);
+        $("#modalHapusData").find("input[name='id']").val(data["id"]);
         $("#modalHapusData").modal("show");
     } else if ($(this).prop("value") == "add_status") {
-        $("#add_status").hide();
-
         var value = ["", "Receive", "Indend"];
-        var parent = $("#tableListBarang tbody tr td #add");
+        var parent = $(this).closest("tr").find("#add-status");
 
-        const select = document.createElement("select");
-        select.id = "status";
-        select.name = "status";
-        select.className = "custom-select";
+        $.each(parent, function () {
+            $(this).find("#add_status").hide();
 
-        const options = value.map((status) => {
-            const val = status.toLocaleLowerCase();
-            return `<option value="${val}">${status}</option>`;
+            const select = document.createElement("select");
+            select.id = "status";
+            select.name = "status";
+            select.className = "custom-select custom-select-sm mx-1";
+
+            const options = value.map((status) => {
+                const val = status.toLocaleLowerCase();
+                return `<option value="${val}">${status}</option>`;
+            });
+            select.innerHTML = options;
+            parent.append(select);
+
+            const closeBtn = document.createElement("button");
+            closeBtn.id = "close_btn";
+            closeBtn.value = "close_btn";
+            closeBtn.className = "btn btn-sm btn-danger mx-1";
+            closeBtn.innerHTML = `<i class="fa fa-times text-white"></i>`;
+
+            parent.append(closeBtn);
         });
-        select.innerHTML = options;
-        parent.append(select);
+    } else if ($(this).prop("value") == "edit_status") {
+        var value = ["", "Receive", "Indend"];
+        var parent = $(this).closest("tr").find("#edit-status");
 
-        const closeBtn = document.createElement("button")
-        closeBtn.id = "close_btn"
-        closeBtn.value = "close_btn"
-        closeBtn.className = "btn btn-sm btn-danger";
-        closeBtn.innerHTML = `<i class="fa fa-times text-white"></i>`;
+        $.each(parent, function () {
+            $(this).find("#label_status").hide();
+            $(this).find("#edit_status").hide();
 
-        parent.append(closeBtn);
+            const select = document.createElement("select");
+            select.id = "status";
+            select.name = "status";
+            select.className = "custom-select custom-select-sm mx-1";
+
+            const options = value.map((status) => {
+                const val = status.toLocaleLowerCase();
+                return `<option value="${val}">${status}</option>`;
+            });
+            select.innerHTML = options;
+            parent.append(select);
+
+            const closeBtn = document.createElement("button");
+            closeBtn.id = "close_btn";
+            closeBtn.value = "close_btn";
+            closeBtn.className = "btn btn-sm btn-danger mx-1";
+            closeBtn.innerHTML = `<i class="fa fa-times text-white"></i>`;
+
+            parent.append(closeBtn);
+            $("#status").val($(data["status"]).text().toLowerCase().trim());
+        });
+    } else if ($(this).prop("value") == "edit_no_po") {
+        var parent = $(this).closest("tr").find("#edit-po");
+
+        $.each(parent, function () {
+            $(this).find("#no_po").hide();
+            $(this).find("#edit_no_po").hide();
+
+            const input = document.createElement("input");
+            input.id = "input";
+            input.setAttribute("type", "text");
+            input.className = "form-control form-control-sm";
+            input.value = $(this).find("#no_po").text();
+
+            parent.append(input);
+
+            const submitBtn = document.createElement("button");
+            submitBtn.id = "submit_btn";
+            submitBtn.value = "submit_btn";
+            submitBtn.className = "btn btn-sm btn-success mx-1";
+            submitBtn.innerHTML = `<i class="fa fa-check text-white"></i>`;
+            parent.append(submitBtn);
+
+            const closeBtn = document.createElement("button");
+            closeBtn.id = "close_btn";
+            closeBtn.value = "close_btn";
+            closeBtn.className = "btn btn-sm btn-danger mx-1";
+            closeBtn.innerHTML = `<i class="fa fa-times text-white"></i>`;
+
+            parent.append(closeBtn);
+
+            $(this)
+                .find("#submit_btn")
+                .on("click", function () {
+                    no_pre_order = $(parent).find("#input").val();
+                    console.log(no_pre_order);
+
+                    $.ajax({
+                        url: "/list-barang/update-po",
+                        headers: {
+                            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                                "content"
+                            ),
+                        },
+                        data: { id: data["id"], no_pre_order: no_pre_order },
+                        type: "POST",
+                        success: function (response) {
+                            console.log(response);
+                            $(parent).find("#input").remove();
+                            $(parent).find("#close_btn").remove();
+                            $(parent).find("#submit_btn").remove();
+
+                            $(parent).find("#no_po").text(no_pre_order);
+                            $(parent).find("#no_po").show();
+                            $(parent).find("#edit_no_po").show();
+                        },
+                        error: function (x) {
+                            console.log(x.responseText);
+                        },
+                    });
+                });
+        });
     } else if ($(this).prop("value") == "close_btn") {
-        $("#status").remove()
-        $("#close_btn").remove()
-        $("#add_status").show()
+        var parent = $(this).closest("tr");
+
+        $.each(parent, function () {
+            $(this).find("#label_status").show();
+            $(this).find("#edit_status").show();
+            $(this).find("#status").remove();
+            $(this).find("#close_btn").remove();
+            $(this).find("#input").remove();
+            $(this).find("#submit_btn").remove();
+
+            $(this).find("#add_status").show();
+
+            $(this).find("#no_po").show();
+            $(this).find("#edit_no_po").show();
+        });
     }
 });
 
@@ -424,7 +527,6 @@ var tableBarangReturn = $("#tableBarangReturn").DataTable({
         {
             data: null,
             render: function (data) {
-                console.log(data);
                 return data.list_products.no_pre_order;
             },
         },
@@ -442,12 +544,25 @@ var tableBarangReturn = $("#tableBarangReturn").DataTable({
         },
         { data: "qty" },
         { data: "note" },
+        { data: "status" },
         {
-            data: null,
+            data: "action",
             defaultContent: `
-                <button type="button" value="update" class="btn btn-sm btn-warning"><i class="fa fa-pen text-white"></i> Edit</button>
-                <button type="button" value="delete" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</button>
+                <button type="button" value="update" class="btn btn-sm btn-warning" disabled><i class="fa fa-pen text-white"></i> Edit</button>
+                <button type="button" value="delete" class="btn btn-sm btn-danger" disabled><i class="fa fa-trash"></i> Delete</button>
                 `,
+        },
+    ],
+    columnDefs: [
+        {
+            targets: [8],
+            render: function (data, type, row, meta) {
+                if (row.action != undefined) {
+                    return row.action;
+                } else {
+                    tableBarangReturn.columns([8]).visible(false);
+                }
+            },
         },
     ],
 });
@@ -462,8 +577,8 @@ $("#tableBarangReturn tbody").on("click", "button", function () {
             .val(data["products_id"]);
         $("#modalUpdateData").find("input[name='qty']").val(data["qty"]);
         $("#modalUpdateData")
-            .find("select[name='suppliers_id']")
-            .val(data["suppliers_id"]);
+            .find("select[name='no_pre_order']")
+            .val(data["list_products_id"]);
         $("#modalUpdateData")
             .find("input[name='created_at']")
             .val(moment(data["created_at"]).format("yyyy-MM-DD"));
@@ -481,8 +596,110 @@ $("#tableBarangReturn tbody").on("click", "button", function () {
             .find("input[name='invoice_number']")
             .val(data["invoice_number"]);
         $("#modalHapusData").modal("show");
+    } else if ($(this).prop("value") == "add_status") {
+
+        var value = ["", "On Progress", "Done Resolved", "Rejected"];
+        var parent = $(this).closest("tr").find('#add');
+
+        $.each(parent, function () {
+            $(this).find("#add_status").hide();
+
+            const select = document.createElement("select");
+            select.id = "status";
+            select.name = "status";
+            select.className = "custom-select custom-select-sm mx-1";
+
+            const options = value.map((status) => {
+                const val = status.toLocaleLowerCase();
+                return `<option value="${val}">${status}</option>`;
+            });
+            select.innerHTML = options;
+            parent.append(select);
+
+            const closeBtn = document.createElement("button");
+            closeBtn.id = "close_btn";
+            closeBtn.value = "close_btn";
+            closeBtn.className = "btn btn-sm btn-danger mx-1";
+            closeBtn.innerHTML = `<i class="fa fa-times text-white"></i>`;
+
+            parent.append(closeBtn);
+        })
+
+    } else if ($(this).prop("value") == "edit_status") {
+
+        var value = ["", "On Progress", "Done Resolved", "Rejected"];
+
+        var parent = $(this).closest("tr").find('#edit');
+
+        $.each(parent, function () {
+            $(this).find("#label_status").hide();
+            $(this).find("#edit_status").hide();
+
+            const select = document.createElement("select");
+            select.id = "status";
+            select.name = "status";
+            select.className = "custom-select custom-select-sm mx-1";
+
+            const options = value.map((status) => {
+                const val = status.toLocaleLowerCase();
+                return `<option value="${val}">${status}</option>`;
+            });
+            select.innerHTML = options;
+            parent.append(select);
+
+            const closeBtn = document.createElement("button");
+            closeBtn.id = "close_btn";
+            closeBtn.value = "close_btn";
+            closeBtn.className = "btn btn-sm btn-danger mx-1";
+            closeBtn.innerHTML = `<i class="fa fa-times text-white"></i>`;
+
+            parent.append(closeBtn);
+        })
+    } else if ($(this).prop("value") == "close_btn") {
+        var parent = $(this).closest("tr");
+
+        $.each(parent, function () {
+            $(this).find("#status").remove();
+            $(this).find("#close_btn").remove();
+            $(this).find("#add_status").show();
+
+            $(this).find("#label_status").show();
+            $(this).find("#edit_status").show();
+        })
     }
 });
+
+/* Aksi Update Status dengan Selected Option */
+$("#tableBarangReturn tbody").on(
+    "change",
+    'select[name="status"]',
+    function () {
+        var data = tableBarangReturn.row($(this).parents("tr")).data();
+        id = data["id"];
+        value = $(this).find(":selected").val();
+        console.log(value);
+
+        $.ajax({
+            url: "/return",
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            data: {
+                id: id,
+                status: value,
+                invoice_number: data["invoice_number"],
+                product_id: data["products_id"],
+            },
+            type: "POST",
+            success: function (response) {
+                console.log(response);
+            },
+            error: function (x) {
+                console.log(x.responseText);
+            },
+        });
+    }
+);
 
 /* DataTable Return [END] */
 

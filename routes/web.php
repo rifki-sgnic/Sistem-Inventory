@@ -34,11 +34,6 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-/* Access Level Admin, Superadmin & Warehouse */
-// Route::middleware(['role:admin|superadmin'])->group(function () {
-//     // Dashboard
-// });
-
 /* Access Level Admin & SuperAdmin */
 Route::middleware(['role:admin|superadmin'])->group(function () {
 
@@ -59,6 +54,11 @@ Route::middleware(['role:admin|superadmin'])->group(function () {
     Route::post('/supplier/hapus', [SupplierController::class, 'hapus'])->name('supplier.hapus');
     Route::get('/supplier/cetak-pdf', [SupplierController::class, 'cetakPdf'])->name('supplier.cetak');
 
+    // Route Data List Barang
+    Route::post('/list-barang/tambah', [ListProductController::class, 'tambah'])->name('list-barang.tambah');
+    Route::post('/list-barang/update', [ListProductController::class, 'update'])->name('list-barang.update');
+    Route::post('/list-barang/hapus', [ListProductController::class, 'hapus'])->name('list-barang.hapus');
+
     // Route Data Barang Masuk
     Route::get('/receive', [ReceiveController::class, 'index'])->name('receive.index');
     Route::post('/receive/tambah', [ReceiveController::class, 'tambah'])->name('receive.tambah');
@@ -74,10 +74,16 @@ Route::middleware(['role:admin|superadmin'])->group(function () {
     Route::post('/transaction/cetak-pdf', [TransactionController::class, 'cetakPdf'])->name('transaction.cetak');
 
     // Route Data Return
-    Route::get('/return', [ReturnController::class, 'index'])->name('admin.return');
     Route::post('/return/tambah', [ReturnController::class, 'tambah'])->name('return.tambah');
     Route::post('/return/update', [ReturnController::class, 'update'])->name('return.update');
     Route::post('/return/hapus', [ReturnController::class, 'hapus'])->name('return.hapus');
+});
+
+Route::middleware(['role:admin|superadmin|trm'])->group(function () {
+    // Route Data Return
+    Route::get('/return', [ReturnController::class, 'index'])->name('return.index');
+    Route::post('/return', [ReturnController::class, 'updateStatus']);
+    Route::post('/return/cetak-pdf', [ReturnController::class, 'cetakPdf'])->name('return.cetak');
 });
 
 /* Access Level Admin */
@@ -92,9 +98,7 @@ Route::middleware(['role:admin'])->group(function () {
 Route::middleware(['role:admin|superadmin|warehouse|purchasing|trm'])->group(function () {
     // Route Data List Barang
     Route::get('/list-barang', [ListProductController::class, 'index'])->name('list-barang.index');
-    Route::post('/list-barang/tambah', [ListProductController::class, 'tambah'])->name('list-barang.tambah');
-    Route::post('/list-barang/update', [ListProductController::class, 'update'])->name('list-barang.update');
     Route::post('/list-barang', [ListProductController::class, 'updateStatus']);
-    Route::post('/list-barang/hapus', [ListProductController::class, 'hapus'])->name('list-barang.hapus');
+    Route::post('/list-barang/update-po', [ListProductController::class, 'updateNoPo']);
     Route::post('/list-barang/cetak-pdf', [ListProductController::class, 'cetakPdf'])->name('list-barang.cetak');
 });

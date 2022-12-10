@@ -37,7 +37,6 @@ class ReceiveController extends Controller
             'products_id' => 'required',
             'qty' => 'required',
             'suppliers_id' => 'required',
-            'note' => 'required'
         ]);
 
         $invoice = IdGenerator::generate(['table' => 'receives', 'field' => 'invoice_number', 'length' => 8, 'prefix' => 'BM-']);

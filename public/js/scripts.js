@@ -1,5 +1,4 @@
-moment.locale();
-moment().format("L");
+moment.locale("id");
 
 $(document).ready(function () {
     bsCustomFileInput.init();
@@ -7,11 +6,11 @@ $(document).ready(function () {
 
 async function dataChart() {
     let data;
-    const res = await fetch('/chart')
+    const res = await fetch("/chart");
     data = await res.json();
-    console.log(data)
+    console.log(data);
 
-    length = data.length
+    length = data.length;
     // console.log(length)
 
     labels = [];
@@ -23,7 +22,7 @@ async function dataChart() {
         values.push(data[i].qty);
     }
 
-    const maxValue = Math.max.apply(Math, values)
+    const maxValue = Math.max.apply(Math, values);
 
     var colors = [];
     var borderColors = [];
@@ -31,10 +30,10 @@ async function dataChart() {
     for (var i = 0; i < values.length; i++) {
         var color;
         var borderColor;
-        if (values[i] <= 5) {
+        if (values[i] <= 3) {
             color = "rgba(255, 99, 132, 0.2)";
             borderColor = "rgb(255, 99, 132)";
-        } else if (values[i] <= 10) {
+        } else if (values[i] <= 7) {
             color = "rgba(255, 205, 86, 0.2)";
             borderColor = "rgb(255, 205, 86)";
         } else {
@@ -50,25 +49,25 @@ async function dataChart() {
         data: {
             labels: labels,
             datasets: [
-        {
-            label: "Data Stock Barang",
-            data: values,
-            backgroundColor: colors,
-            borderColor: borderColors,
-            borderWidth: 1,
-        },
-    ],
+                {
+                    label: "Data Stock Barang",
+                    data: values,
+                    backgroundColor: colors,
+                    borderColor: borderColors,
+                    borderWidth: 1,
+                },
+            ],
         },
         options: {
             scales: {
                 y: {
                     beginAtZero: true,
-                    suggestedMax: maxValue + 5
+                    suggestedMax: maxValue + 5,
                 },
             },
             layout: {
-                padding: 25
-            }
+                padding: 25,
+            },
         },
     });
 }
@@ -78,15 +77,26 @@ dataChart();
 function getAlertData() {
     var content = "";
     $.ajax({
-        url: '/chart',
-        dataType: 'json',
-        success: function(response) {
-            data = response
+        url: "/chart",
+        dataType: "json",
+        success: function (response) {
+            data = response;
 
-            length = data.length
+            length = data.length;
 
             for (var i = 0; i < length; i++) {
-                if (data[i].qty <= 5) {
+                if (data[i].qty == 0) {
+                    content +=
+                        `
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert"> Stok ` +
+                        data[i].nama_produk +
+                        ` Habis` +
+                        `<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        `;
+                } else if (data[i].qty <= 3) {
                     content +=
                         `
                         <div class="alert alert-danger alert-dismissible fade show" role="alert"> Stok ` +
@@ -98,7 +108,7 @@ function getAlertData() {
                             </button>
                         </div>
                     `;
-                } else if (data[i].qty <= 10) {
+                } else if (data[i].qty <= 7) {
                     content +=
                         `
                         <div class="alert alert-warning alert-dismissible fade show" role="alert"> Stok ` +
@@ -112,9 +122,9 @@ function getAlertData() {
                 }
             }
 
-            $('#alertstock').html(content);
-        }
-    })
+            $("#alertstock").html(content);
+        },
+    });
 }
 
 getAlertData();

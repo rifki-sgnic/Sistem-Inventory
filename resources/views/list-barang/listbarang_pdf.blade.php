@@ -7,12 +7,12 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
     integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-  <title>Data Master Barang PDF</title>
+  <title>Data List Penerimaan Barang PDF</title>
 </head>
 
 <body>
   <center>
-    <h2>Data Produk</h2>
+    <h2>Data List Penerimaan Barang</h2>
     <h4>{{ $startDate }} - {{ $endDate }}</h4>
   </center>
   <table class="table table-bordered text-center">
