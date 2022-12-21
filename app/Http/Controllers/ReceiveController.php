@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ListProduct;
 use Carbon\Carbon;
 use App\Models\Product;
 use App\Models\Receive;
+use App\Models\RequestProduct;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -21,6 +23,8 @@ class ReceiveController extends Controller
 
             return DataTables::of($data)->make(true);
         }
+
+        // $data = ListProduct::with('request_products', 'request_products.request_product_detail', 'request_products.request_product_detail.products')->get();
 
         return view('receive.receive', [
             'title' => 'Barang Masuk',

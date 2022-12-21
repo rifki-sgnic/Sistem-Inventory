@@ -128,3 +128,127 @@ function getAlertData() {
 }
 
 getAlertData();
+
+var list_barang = [];
+
+var tambah_request = $("#tambah_request");
+tambah_request.on("click", function () {
+    var no_purchase_request = $("#no_purchase_request").val();
+    var tanggal = $("#tanggal").val();
+
+    if (no_purchase_request && tanggal) {
+        if (list_barang.length > 0) {
+            data = JSON.stringify({
+                no_purchase_request: no_purchase_request,
+                tanggal: tanggal,
+                list_barang: list_barang,
+            });
+
+            $.ajax({
+                url: "/request-barang/store",
+                type: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                        "content"
+                    ),
+                },
+                contentType: "application/json",
+                dataType: "json",
+                data: data,
+            }).then(function (response) {
+                tambah_request.disabled = true;
+                alert(response.message);
+                window.location.href = "/request-barang";
+            });
+        } else {
+            $("#inputRequest .invalid-feedback").show();
+        }
+    } else {
+        $("#inputRequest .invalid-tooltip").show();
+    }
+});
+
+var tableRequest = $("#tableRequest tbody");
+var tambah_barang = $("#tambah_barang");
+
+tambah_barang.on("click", function () {
+    var products_id = $("#products_id").find(":selected").val();
+    var product = $("#products_id").find(":selected").text();
+    var jumlah = $("#jumlah").val();
+    var harga = $("#harga").val();
+    var remarks = $("#remarks").val();
+
+    console.log(product);
+
+    if (products_id && jumlah && harga && remarks) {
+        barang = {
+            products_id: products_id,
+            qty: jumlah,
+            harga: harga,
+            remarks: remarks,
+        };
+
+        list_barang.push(barang);
+        console.log(list_barang);
+
+        barang = {};
+
+        var markup = `<tr>
+        <td>${list_barang.length}</td>
+        <td>${product}</td>
+        <td>${jumlah}</td>
+        <td>${harga}</td>
+        <td>${remarks}</td>
+        <td><button id="btn_delete" value="${list_barang.length}" class="btn btn-sm btn-danger"><i class="fa fa-times text-white"></i></button></td>
+    </tr>`;
+
+        tableRequest.append(markup);
+    } else {
+        $("#inputBarang .invalid-tooltip").show();
+    }
+});
+
+tableRequest.on("click", "button", function () {
+    var data = $(this).closest("tr");
+
+    if ($(this).prop("id") == "btn_delete") {
+        list_barang.splice(
+            list_barang.findIndex(
+                ({ product }) => product == data.find("td:eq(1)").text()
+            ),
+            1
+        );
+        data.remove();
+    }
+});
+
+var tableDetailRequest = $("#tableDetailRequest");
+var listDetailRequest = [];
+var barangDetailRequest = {}
+tableDetailRequest.find("tbody").on("click", "button", function () {
+    var data = $(this).closest("tr");
+
+    // console.log(data.find)
+
+    // if ($(this).prop("value") == "update") {
+    //     var produk = data.find("#produk").text();
+    //     var qty = data.find("#qty").text();
+    //     console.log(qty);
+
+    //     $("#modalUpdateData").find('input[name="produk"]').val(produk);
+    //     $("#modalUpdateData").find('input[name="qty"]').val(qty);
+    //     $("#modalUpdateData").modal("show");
+    // } else if($(this).prop('value') == 'delete') {
+    //     var data = $(this).closest("tr");
+
+    //     if ($(this).prop("id") == "btn_delete") {
+    //         list_barang.splice(
+    //             list_barang.findIndex(
+    //                 ({ product }) => product == data.find("td:eq(1)").text()
+    //             ),
+    //             1
+    //         );
+    //         data.remove();
+    //     }
+    // }
+});

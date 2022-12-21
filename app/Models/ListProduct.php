@@ -9,5 +9,12 @@ class ListProduct extends Model
 {
     use HasFactory;
 
+    public $table = 'list_products';
+
     protected $guarded = ['id'];
+
+    public function request_products()
+    {
+        return $this->belongsTo(RequestProduct::class, 'request_products_id', 'id');
+    }
 }

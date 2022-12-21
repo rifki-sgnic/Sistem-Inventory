@@ -19,7 +19,7 @@ return new class extends Migration
             $table->timestamps();
             $table->foreignId('products_id')->index('fk_receives_to_products');
             $table->integer('qty');
-            $table->foreignId('suppliers_id')->index('fk_receives_to_suppliers');
+            $table->foreignId('suppliers_id')->index('fk_receives_to_suppliers')->nullable();
             $table->text('note')->nullable();
         });
     }

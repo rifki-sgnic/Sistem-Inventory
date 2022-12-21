@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('list_products', function (Blueprint $table) {
             $table->id();
             $table->string('invoice_number');
-            $table->string('no_request_product');
+            $table->foreignId('request_products_id')->index('fk_list_products_to_request_products');
             $table->string('no_pre_order')->nullable();
             $table->enum('status', ['receive', 'indend'])->nullable();
             $table->string('file')->nullable();

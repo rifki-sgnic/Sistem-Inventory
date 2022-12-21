@@ -43,7 +43,7 @@
               <th>No.</th>
               <th>ID List</th>
               <th>Tanggal</th>
-              <th>No Request Barang</th>
+              <th>No Purchase Request</th>
               <th>No Pre Order</th>
               <th>File</th>
               <th>Status</th>
@@ -71,8 +71,14 @@
           @csrf
           <div class="modal-body">
             <div class="form-group">
-              <label for="no_request_product">No Request Barang</label>
-              <input type="text" name="no_request_product" placeholder="No Request Barang" class="form-control">
+              <label for="request_products_id">No Purchase Request</label>
+              {{-- <input type="text" name="no_purchase_request" placeholder="No Purchase Request" class="form-control"> --}}
+              <select name="request_products_id" id="request_products_id" class="form-control">
+                <option value="">Pilih No PR ...</option>
+                @foreach ($req_products as $req_product)
+                  <option value="{{ $req_product->id }}">{{ $req_product->no_purchase_request }}</option>
+                @endforeach
+              </select>
             </div>
             <div class="form-group">
               <label for="no_pre_order">No Pre Order</label>
@@ -124,8 +130,8 @@
           @csrf
           <div class="modal-body">
             <div class="form-group">
-              <label for="no_request_product">No Request Barang</label>
-              <input type="text" name="no_request_product" placeholder="No Request Barang" class="form-control">
+              <label for="no_purchase_request">No Purchase Request</label>
+              <input type="text" name="no_purchase_request" placeholder="No Purchase Request" class="form-control" disabled>
             </div>
             <div class="form-group">
               <label for="no_pre_order">No Pre Order</label>
@@ -149,6 +155,7 @@
               <label class="custom-file-label" for="file">Choose file</label>
             </div>
             <input type="hidden" name="id" required readonly>
+            <input type="hidden" name="request_products_id" required readonly>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

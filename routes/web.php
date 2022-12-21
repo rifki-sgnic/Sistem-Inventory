@@ -12,6 +12,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ListProductController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\RequestProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -95,10 +96,19 @@ Route::middleware(['role:admin'])->group(function () {
     Route::post('/user-management/hapus', [UserController::class, 'hapus'])->name('user-management.hapus');
 });
 
+Route::middleware(['role:admin|superadmin|purchasing'])->group(function () {
+    Route::get('/request-barang', [RequestProductController::class, 'index'])->name('request-barang.index');
+    Route::post('/request-barang/detail/update', [RequestProductController::class, 'updateStatus'])->name('request-barang.update');
+    Route::get('/request-barang/tambah', [RequestProductController::class, 'tambah'])->name('request-barang.tambah');
+    Route::post('/request-barang/store', [RequestProductController::class, 'store'])->name('request-barang.store');
+});
+
 Route::middleware(['role:admin|superadmin|warehouse|purchasing|trm'])->group(function () {
     // Route Data List Barang
     Route::get('/list-barang', [ListProductController::class, 'index'])->name('list-barang.index');
     Route::post('/list-barang', [ListProductController::class, 'updateStatus']);
     Route::post('/list-barang/update-po', [ListProductController::class, 'updateNoPo']);
     Route::post('/list-barang/cetak-pdf', [ListProductController::class, 'cetakPdf'])->name('list-barang.cetak');
+
+    Route::get('/request-barang/detail/{id}', [RequestProductController::class, 'detail'])->name('request-barang.detail');
 });

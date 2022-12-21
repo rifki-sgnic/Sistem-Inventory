@@ -121,18 +121,17 @@ var tableListBarang = $("#tableListBarang").DataTable({
                 return moment(data.created_at).format("DD MMMM YYYY");
             },
         },
-        { data: "no_request_product" },
+        {
+            data: null,
+            render: function (data) {
+                return `<a href="/request-barang/detail/${data.request_products.no_purchase_request}">${data.request_products.no_purchase_request}</a>`;
+            },
+        },
         { data: "no_pre_order" },
         {
             data: null,
             render: function (data, type, full, meta) {
-                return (
-                    '<a href="storage/post-pdf/' +
-                    data.file +
-                    '">' +
-                    data.file +
-                    "</a>"
-                );
+                return `<a href="storage/post-pdf/${data.file}">${data.file}</a>`;
             },
         },
         { data: "status" },
@@ -164,8 +163,8 @@ $("#tableListBarang tbody").on("click", "button", function () {
 
     if ($(this).prop("value") == "update") {
         $("#modalUpdateData")
-            .find("input[name='no_request_product']")
-            .val(data["no_request_product"]);
+            .find("input[name='no_purchase_request']")
+            .val(data.request_products.no_purchase_request);
         $("#modalUpdateData")
             .find("input[name='no_pre_order']")
             .val(data["no_pre_order"]);
@@ -177,9 +176,14 @@ $("#tableListBarang tbody").on("click", "button", function () {
             .val(moment(data["created_at"]).format("yyyy-MM-DD"));
 
         $("#modalUpdateData").find("input[name='id']").val(data["id"]);
+        $("#modalUpdateData")
+            .find("input[name='request_products_id']")
+            .val(data.request_products_id);
         $("#modalUpdateData").modal("show");
     } else if ($(this).prop("value") == "delete") {
-        $("#modalHapusData").find("p strong").html(data["no_request_product"]);
+        $("#modalHapusData")
+            .find("p strong")
+            .html(data.request_products.no_purchase_request);
 
         $("#modalHapusData").find("input[name='id']").val(data["id"]);
         $("#modalHapusData").modal("show");
@@ -365,24 +369,16 @@ var tableReceive = $("#tableReceive").DataTable({
         {
             data: null,
             render: function (data, type, full, meta) {
-                return (
-                    data.products.kd_produk +
-                    " - " +
-                    data.products.nama_produk +
-                    " - " +
-                    data.products.type
-                );
+                return `${data.products.kd_produk} - ${data.products.nama_produk} - ${data.products.type}`;
             },
         },
         { data: "qty" },
         {
             data: null,
             render: function (data) {
-                return (
-                    data.suppliers.kd_supplier +
-                    " - " +
-                    data.suppliers.nama_supplier
-                );
+                return data.suppliers == null
+                    ? "-"
+                    : `${data.suppliers.kd_supplier} - ${data.suppliers.nama_supplier}`;
             },
         },
         { data: "note" },
@@ -597,9 +593,8 @@ $("#tableBarangReturn tbody").on("click", "button", function () {
             .val(data["invoice_number"]);
         $("#modalHapusData").modal("show");
     } else if ($(this).prop("value") == "add_status") {
-
         var value = ["", "On Progress", "Done Resolved", "Rejected"];
-        var parent = $(this).closest("tr").find('#add');
+        var parent = $(this).closest("tr").find("#add");
 
         $.each(parent, function () {
             $(this).find("#add_status").hide();
@@ -623,13 +618,11 @@ $("#tableBarangReturn tbody").on("click", "button", function () {
             closeBtn.innerHTML = `<i class="fa fa-times text-white"></i>`;
 
             parent.append(closeBtn);
-        })
-
+        });
     } else if ($(this).prop("value") == "edit_status") {
-
         var value = ["", "On Progress", "Done Resolved", "Rejected"];
 
-        var parent = $(this).closest("tr").find('#edit');
+        var parent = $(this).closest("tr").find("#edit");
 
         $.each(parent, function () {
             $(this).find("#label_status").hide();
@@ -654,7 +647,7 @@ $("#tableBarangReturn tbody").on("click", "button", function () {
             closeBtn.innerHTML = `<i class="fa fa-times text-white"></i>`;
 
             parent.append(closeBtn);
-        })
+        });
     } else if ($(this).prop("value") == "close_btn") {
         var parent = $(this).closest("tr");
 
@@ -665,7 +658,7 @@ $("#tableBarangReturn tbody").on("click", "button", function () {
 
             $(this).find("#label_status").show();
             $(this).find("#edit_status").show();
-        })
+        });
     }
 });
 
@@ -750,6 +743,56 @@ $("#tableUserData tbody").on("click", "button", function () {
         $("#modalHapusData").find("p strong").html(data["name"]);
         $("#modalHapusData").find("input[name='id']").val(data["id"]);
         $("#modalHapusData").modal("show");
+    }
+});
+
+/* DataTable User Management [END] */
+
+/* DataTable User Management [START] */
+var tableBarangRequest = $("#tableBarangRequest").DataTable({
+    deferRender: true,
+    ajax: "/request-barang",
+    columns: [
+        {
+            data: null,
+            render: function (data, type, full, meta) {
+                return meta.row + 1;
+            },
+        },
+        { data: "no_purchase_request" },
+        {
+            data: null,
+            render: function (data) {
+                return moment(data.created_at).format("DD MMMM YYYY");
+            },
+        },
+        {
+            data: null,
+            render: function (data) {
+                if (data.status == "approved") {
+                    return `<span class="btn btn-sm btn-success disabled">Approved</span>`;
+                } else if (data.status == "rejected") {
+                    return `<span class="btn btn-sm btn-danger disabled">Rejected</span>`;
+                } else {
+                    return "-";
+                }
+            },
+        },
+        {
+            data: null,
+            defaultContent: `
+                <button type="button" value="detail" class="btn btn-sm btn-primary"> Detail</button>
+                `,
+        },
+    ],
+});
+
+/* Aksi Update dan Delete dengan Modal */
+$("#tableBarangRequest tbody").on("click", "button", function () {
+    var data = tableBarangRequest.row($(this).parents("tr")).data();
+
+    if ($(this).prop("value") == "detail") {
+        window.location.href = `/request-barang/detail/${data.no_purchase_request}`;
     }
 });
 

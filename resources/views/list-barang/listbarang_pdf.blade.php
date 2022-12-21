@@ -21,7 +21,7 @@
         <th>No.</th>
         <th>ID List</th>
         <th>Tanggal</th>
-        <th>No Request Barang</th>
+        <th>No Purchase Request</th>
         <th>No Pre Order</th>
         <th>File</th>
         <th>Status</th>

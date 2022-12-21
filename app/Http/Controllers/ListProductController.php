@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Product;
+use App\Models\Receive;
 use App\Models\ListProduct;
 use Illuminate\Http\Request;
+use App\Models\RequestProduct;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\StockTransaction;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
@@ -18,7 +22,7 @@ class ListProductController extends Controller
         $role = auth()->user()->roles->pluck('name')->first();
 
         if ($request->ajax()) {
-            $data = ListProduct::get();
+            $data = ListProduct::with('request_products')->get();
 
             switch ($role) {
                 case 'admin':
@@ -87,8 +91,12 @@ class ListProductController extends Controller
             }
         }
 
+        // $data = ListProduct::with('request_products', 'request_products.request_product_detail')->whereId(1)->get()->first();
+        // dd($data);
+
         return view('list-barang.listbarang', [
             'title' => 'List Barang',
+            'req_products' => RequestProduct::select()->where('status', '=', 'approved')->get(),
         ]);
     }
 
@@ -107,7 +115,7 @@ class ListProductController extends Controller
     public function tambah(Request $request)
     {
         $request->validate([
-            "no_request_product" => "required",
+            "request_products_id" => "required",
             "created_at" => "required",
             "file" => "file|max:5120",
         ]);
@@ -131,7 +139,7 @@ class ListProductController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            "no_request_product" => "required",
+            "request_products_id" => "required",
             "created_at" => "required",
             "file" => "file|max:5120",
         ]);
@@ -140,11 +148,63 @@ class ListProductController extends Controller
 
         ListProduct::whereId($request->id)->update($input);
 
+        if ($request['status'] == 'receive') {
+            $data = ListProduct::with('request_products', 'request_products.request_product_detail')->whereId($request['id'])->get()->first();
+            $invoice = IdGenerator::generate(['table' => 'receives', 'field' => 'invoice_number', 'length' => 8, 'prefix' => 'BM-']);
+            $selectedProduct = collect($data->request_products->request_product_detail)->map(function ($value) use($invoice) {
+
+                StockTransaction::create([
+                    'invoice_number' => $invoice,
+                    'products_id' => $value['products_id'],
+                    'qty' => $value['qty'],
+                ]);
+
+                $stock = StockTransaction::where('invoice_number', $invoice)->get()->first();
+                Product::where('id', $value['products_id'])->increment('qty', $stock->qty);
+
+                return [
+                    'invoice_number' => $invoice,
+                    'products_id' => $value['products_id'],
+                    'qty' => $value['qty'],
+                    'created_at' => $value['created_at'],
+                    'updated_at' => $value['updated_at']
+                ];
+            });
+
+            Receive::insert($selectedProduct->toArray());
+        }
+
         return redirect()->route('list-barang.index')->with('success', 'Data berhasil diupdate!');
     }
 
     public function updateStatus(Request $request)
     {
+        if ($request['status'] == 'receive') {
+            $data = ListProduct::with('request_products', 'request_products.request_product_detail')->whereId($request['id'])->get()->first();
+            $invoice = IdGenerator::generate(['table' => 'receives', 'field' => 'invoice_number', 'length' => 8, 'prefix' => 'BM-']);
+            $selectedProduct = collect($data->request_products->request_product_detail)->map(function ($value) use ($invoice) {
+
+                StockTransaction::create([
+                    'invoice_number' => $invoice,
+                    'products_id' => $value['products_id'],
+                    'qty' => $value['qty'],
+                ]);
+
+                $stock = StockTransaction::where('invoice_number', $invoice)->get()->first();
+                Product::where('id', $value['products_id'])->increment('qty', $stock->qty);
+
+                return [
+                    'invoice_number' => $invoice,
+                    'products_id' => $value['products_id'],
+                    'qty' => $value['qty'],
+                    'created_at' => $value['created_at'],
+                    'updated_at' => $value['updated_at']
+                ];
+            });
+
+            Receive::insert($selectedProduct->toArray());
+        }
+
         return ListProduct::whereId($request['id'])->update(['status' => $request['status']]);
     }
 
