@@ -37,7 +37,7 @@ $("#tableMasterBarang tbody").on("click", "button", function () {
             .find("input[name='kd_produk']")
             .val(data["kd_produk"]);
         $("#modalUpdateData")
-            .find("input[name='nama']")
+            .find("input[name='nama_produk']")
             .val(data["nama_produk"]);
         $("#modalUpdateData").find("input[name='type']").val(data["type"]);
         $("#modalUpdateData").find("input[name='merk']").val(data["merk"]);

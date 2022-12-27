@@ -122,7 +122,7 @@
             </div>
             <div class="form-group">
               <label for="nama">Nama Produk</label>
-              <input type="text" id="nama" name="nama" placeholder="nama produk" class="form-control" required>
+              <input type="text" id="nama" name="nama_produk" placeholder="nama produk" class="form-control" required>
             </div>
             <div class="form-group">
               <label for="type">Type</label>
