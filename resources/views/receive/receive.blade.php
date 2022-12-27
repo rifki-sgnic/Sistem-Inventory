@@ -79,7 +79,7 @@
             </div>
             <div class="form-group">
               <label for="qty">QTY</label>
-              <input type="number" name="qty" id="qty" placeholder="qty" class="form-control">
+              <input type="number" name="qty" id="qty" placeholder="qty" class="form-control" required>
             </div>
             <div class="form-group">
               <label for="supplier">Supplier</label>
@@ -92,7 +92,7 @@
             </div>
             <div class="form-group">
               <label for="tanggal">Tanggal</label>
-              <input type="date" name="created_at" id="tanggal" placeholder="tanggal" class="form-control">
+              <input type="date" name="created_at" id="tanggal" placeholder="tanggal" class="form-control" required>
             </div>
             <div class="form-group">
               <label for="note">Noted</label>

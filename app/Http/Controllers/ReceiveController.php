@@ -65,7 +65,6 @@ class ReceiveController extends Controller
         $request->validate([
             'created_at' => 'required',
             'suppliers_id' => 'required',
-            'note' => 'required'
         ]);
 
         $input = $request->except(['_token', 'submit']);

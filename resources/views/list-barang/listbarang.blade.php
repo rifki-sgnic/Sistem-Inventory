@@ -74,7 +74,7 @@
             <div class="form-group">
               <label for="request_products_id">No Purchase Request</label>
               {{-- <input type="text" name="no_purchase_request" placeholder="No Purchase Request" class="form-control"> --}}
-              <select name="request_products_id" id="request_products_id" class="form-control">
+              <select name="request_products_id" id="request_products_id" class="form-control" required>
                 <option value="">Pilih No PR ...</option>
                 @foreach ($req_products as $req_product)
                   <option value="{{ $req_product->id }}">{{ $req_product->no_purchase_request }}</option>
@@ -96,7 +96,7 @@
             </div>
             <div class="form-group">
               <label for="created_at">Tanggal</label>
-              <input type="date" name="created_at" placeholder="tanggal" class="form-control">
+              <input type="date" name="created_at" placeholder="tanggal" class="form-control" required>
             </div>
             <label for="fileInput">File</label>
             <div id="fileInput" class="custom-file">

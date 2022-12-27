@@ -71,19 +71,19 @@
           <div class="modal-body">
             <div class="form-group">
               <label for="kd supplier">KD Supplier</label>
-              <input type="text" name="kd_supplier" placeholder="kd supplier" class="form-control">
+              <input type="text" name="kd_supplier" placeholder="kd supplier" class="form-control" required>
             </div>
             <div class="form-group">
               <label for="nama supplier">Nama Supplier</label>
-              <input type="text" name="nama_supplier" placeholder="nama supplier" class="form-control">
+              <input type="text" name="nama_supplier" placeholder="nama supplier" class="form-control" required>
             </div>
             <div class="form-group">
               <label for="nomor telepon">Nomor Telepon</label>
-              <input type="text" name="no_tlp" placeholder="nomor telepon" class="form-control">
+              <input type="text" name="no_tlp" placeholder="nomor telepon" class="form-control" required>
             </div>
             <div class="form-group">
               <label for="alamat">Alamat</label>
-              <input type="text" name="alamat" placeholder="alamat" class="form-control">
+              <input type="text" name="alamat" placeholder="alamat" class="form-control" required>
             </div>
           </div>
           <div class="modal-footer">
@@ -103,7 +103,7 @@
 
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Update Master Barang</h4>
+          <h4 class="modal-title">Update Data Supplier</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
 

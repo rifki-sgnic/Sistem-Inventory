@@ -56,7 +56,7 @@ class ReturnController extends Controller
         return view('return.return', [
             'title' => 'Return',
             'products' => Product::all(),
-            'list_products' => ListProduct::all(),
+            'list_products' => ListProduct::select()->where('status', '=', 'receive')->get(),
         ]);
     }
 

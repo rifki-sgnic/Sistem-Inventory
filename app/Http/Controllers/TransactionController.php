@@ -75,7 +75,6 @@ class TransactionController extends Controller
         $request->validate([
             'created_at' => 'required',
             'pic' => 'required',
-            'note' => 'required'
         ]);
 
         $input = $request->except(['_token', 'submit']);

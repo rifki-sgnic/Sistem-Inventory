@@ -135,7 +135,7 @@
           @csrf
           <div class="modal-body">
             <div class="form-group">
-              <label for="products_id">KD Produk</label>
+              <label for="products_id">Produk</label>
               <select name="products_id" class="form-control" disabled>
                 <option value="">Pilih produk ...</option>
                 @foreach ($products as $product)
@@ -154,7 +154,7 @@
             </div>
             <div class="form-group">
               <label for="tanggal">Tanggal</label>
-              <input type="date" name="created_at" id="tanggal" placeholder="tanggal" class="form-control">
+              <input type="date" name="created_at" id="tanggal" placeholder="tanggal" class="form-control" required>
             </div>
             <div class="form-group">
               <label for="fileInput">File</label>
