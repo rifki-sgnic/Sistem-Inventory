@@ -29,7 +29,7 @@
       @endif
 
       <div class="d-flex flex-row mb-3">
-        @hasrole('admin|superadmin')
+        @hasrole('admin|superadmin|testing')
         <a href="{{ route('request-barang.tambah') }}" class="btn btn-sm btn-primary mx-1"><i
             class="fa fa-plus text-white"></i> Tambah Data</a>
         @endhasrole
@@ -53,6 +53,57 @@
     </div>
   </div>
 
+  <!-- The Modal -->
+  <div class="modal" id="modalCetakData">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Cetak PDF</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <form action="{{ route('request-barang.cetak') }}" method="post">
+          <div class="modal-body">
+            @csrf
+            <div class="form-group row align-items-center">
+              <label for="status" class="col-sm-4 col-form-label">Nama Produk</label>
+              <div>:</div>
+              <div class="col-sm-5">
+                <select id="status" name="status" class="form-control">
+                  <option value="">All Status</option>
+                  <option value="approved">Approved</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row align-items-center">
+              <label for="start_date" class="col-sm-4 col-form-label">Dari Tanggal</label>
+              <div>:</div>
+              <div class="col-sm-5">
+                <input type="date" name="start_date" id="start_date" class="form-control" required>
+              </div>
+            </div>
+            <div class="form-group row align-items-center">
+              <label for="end_date" class="col-sm-4 col-form-label">Sampai Tanggal</label>
+              <div>:</div>
+              <div class="col-sm-5">
+                <input type="date" name="end_date" id="end_date" class="form-control" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" name="submit">Cetak Data</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
 
 </div>
 

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('products_id')->index('fk_return_products_to_products');
             $table->integer('qty');
             $table->foreignId('list_products_id')->index('fk_return_products_to_list_products');
-            $table->enum('status', ['on progress', 'done resolved', 'rejected'])->nullable();
+            $table->enum('status', ['done resolved', 'rejected'])->nullable();
             $table->text('note')->nullable();
         });
     }

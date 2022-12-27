@@ -11,9 +11,22 @@ class SupplierController extends Controller
 {
     public function index(Request $request)
     {
+        $role = auth()->user()->roles->pluck('name')->first();
+
         if ($request->ajax()) {
             $data = Supplier::get();
-            return DataTables::of($data)->make(true);
+            if ($role == 'superadmin' || $role == 'purchasing' || $role == 'testing') {
+                return DataTables::of($data)
+                    ->addColumn('action', function () {
+                        $btn = '<button type="button" value="update" class="btn btn-sm btn-warning"><i class="fa fa-pen text-white"></i> Edit</button>
+                            <button type="button" value="delete" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</button>';
+                        return $btn;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+            } else {
+                return DataTables::of($data)->make(true);
+            }
         }
 
         return view('supplier.supplier', [

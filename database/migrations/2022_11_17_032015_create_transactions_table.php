@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignId('products_id')->index('fk_transactions_to_products');
             $table->integer('qty');
             $table->string('pic');
+            $table->string('file')->nullable();
             $table->text('note')->nullable();
         });
     }

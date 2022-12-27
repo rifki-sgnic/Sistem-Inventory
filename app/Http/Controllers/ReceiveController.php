@@ -54,7 +54,7 @@ class ReceiveController extends Controller
             'qty' => $input['qty'],
         ]);
 
-        $stock = StockTransaction::where('invoice_number', $input['invoice_number'])->get()->first();
+        $stock = StockTransaction::where('products_id', $input['products_id'])->get()->first();
         Product::where('id', $input['products_id'])->increment('qty', $stock->qty);
 
         return redirect()->route('receive.index')->with('success', 'Data berhasil ditambah!');
@@ -64,8 +64,6 @@ class ReceiveController extends Controller
     {
         $request->validate([
             'created_at' => 'required',
-            'products_id' => 'required',
-            'qty' => 'required',
             'suppliers_id' => 'required',
             'note' => 'required'
         ]);
@@ -84,7 +82,7 @@ class ReceiveController extends Controller
 
         $data = Receive::findOrFail($id);
 
-        $stock = StockTransaction::where('invoice_number', $invoice_number)->get()->first();
+        $stock = StockTransaction::where('products_id', $product_id)->get()->first();
         Product::where('id', $product_id)->decrement('qty', $stock->qty);
 
         StockTransaction::where('invoice_number', $invoice_number)->delete();

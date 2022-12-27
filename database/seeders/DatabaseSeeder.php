@@ -17,7 +17,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([UserRoleSeeder::class]);
 
-
         $products = [
             [
                 'kd_produk' => 'A123X',

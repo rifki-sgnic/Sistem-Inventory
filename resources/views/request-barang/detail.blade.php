@@ -44,10 +44,10 @@
                   <th>Jumlah</th>
                   <th>Harga</th>
                   <th>Remarks</th>
-                  @hasrole('warehouse')
+                  @hasrole('warehouse|testing')
                   <th>Note</th>
                   @endhasrole
-                  @hasrole('superadmin|purchasing')
+                  @hasrole('superadmin|purchasing|testing')
                   <th>Aksi</th>
                   @endhasrole
                 </tr>
@@ -60,12 +60,17 @@
                   <td id="qty">{{ $item->qty }}</td>
                   <td id="harga">{{ $item->harga }}</td>
                   <td id="remarks">{{ $item->remarks }}</td>
-                  @hasrole('warehouse')
-                  <td id="note"><button type="button" value="update" class="btn btn-sm btn-success"><i class="fa fa-plus text-white"></i>
-                    Add</button>
-                  </td>
+                  <td id="id" hidden>{{ $item->id }}</td>
+                  @hasrole('warehouse|testing')
+                  @if ($item->note != '')
+                    <td id="note">{{ $item->note }}</td>
+                  @else
+                    <td id="note"><button type="button" value="add-note" class="btn btn-sm btn-success"><i class="fa fa-plus text-white"></i>
+                      Add</button>
+                    </td>
+                  @endif
                   @endhasrole
-                  @hasrole('superadmin|purchasing')
+                  @hasrole('superadmin|purchasing|testing')
                   <td>
                     <button type="button" value="update" class="btn btn-sm btn-warning"><i class="fa fa-pen text-white"></i>
                       Edit</button>
@@ -78,9 +83,9 @@
             </table>
           </div>
         </div>
-        @hasrole('admin')
+        @hasrole('admin|testing')
         <div class="col">
-          <form action="{{ route('request-barang.update') }}" method="POST">
+          <form action="{{ route('request-barang.update-status') }}" method="POST">
             @csrf
             <div class="form-group">
               <label for="status">Status</label>
@@ -134,29 +139,68 @@
         </div>
 
         <!-- Modal body -->
-        <div class="modal-body">
-          <div class="form-group">
-            <label for="produk">Produk</label>
-            <input type="text" id="produk" name="produk" placeholder="Produk" class="form-control" disabled>
+        <form action="{{ route('request-barang.update-produk') }}" method="POST">
+        @csrf
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="produk">Produk</label>
+              <input type="text" id="produk" name="produk" placeholder="Produk" class="form-control" disabled>
+            </div>
+            <div class="form-group">
+              <label for="qty">Qty</label>
+              <input type="number" id="qty" name="qty" placeholder="qty" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="harga">Harga</label>
+              <input type="number" id="harga" name="harga" placeholder="Harga" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="remarks">Remarks</label>
+              <input type="text" id="remarks" name="remarks" placeholder="Remarks" class="form-control" required>
+            </div>
+            <input type="hidden" name="id" required readonly>
+            <input type="hidden" name="no_purchase_request" required readonly value="{{ $detail->no_purchase_request }}">
           </div>
-          <div class="form-group">
-            <label for="qty">Qty</label>
-            <input type="number" id="qty" name="qty" placeholder="qty" class="form-control" required>
-          </div>
-          <div class="form-group">
-            <label for="harga">Harga</label>
-            <input type="text" id="harga" name="harga" placeholder="Harga" class="form-control" required>
-          </div>
-          <input type="hidden" name="id" required readonly>
-        </div>
 
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" name="btn_update_detail">Update</button>
-        </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Update</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
+
+<!-- Modal Tambah Note -->
+<div class="modal" id="modalAddNote">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Add Note Detail Request Barang</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <form action="{{ route('request-barang.add-note-produk') }}" method="POST">
+        @csrf
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="note">Note</label>
+            <textarea class="form-control" id="note" name="note" rows="3"></textarea>
+          </div>
+          <input type="hidden" name="id" required readonly>
+          <input type="hidden" name="no_purchase_request" required readonly value="{{ $detail->no_purchase_request }}">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
   <!-- Modal Hapus Data -->
   <div class="modal" id="modalHapusData">
@@ -176,9 +220,10 @@
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <form action="{{ route('master.hapus') }}" method="POST">
+          <form action="{{ route('request-barang.hapus-produk') }}" method="POST">
             @csrf
             <input type="hidden" name="id" required readonly>
+            <input type="hidden" name="no_purchase_request" required readonly value="{{ $detail->no_purchase_request }}">
             <button type="submit" class="btn btn-primary">Hapus</button>
           </form>
         </div>

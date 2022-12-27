@@ -8,6 +8,7 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\StockTransaction;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 
@@ -35,6 +36,7 @@ class TransactionController extends Controller
             'products_id' => 'required',
             'qty' => 'required',
             'pic' => 'required',
+            "file" => "file|max:5120",
         ]);
 
         $input = $request->all();
@@ -47,6 +49,13 @@ class TransactionController extends Controller
             $invoice = IdGenerator::generate(['table' => 'transactions', 'field' => 'invoice_number', 'length' => 8, 'prefix' => 'BK-']);
             $input['invoice_number'] = $invoice;
 
+            if ($request->file('file')) {
+                $fileName = $request->file('file')->getClientOriginalName();
+                $input['file'] = $fileName;
+
+                $request->file('file')->storeAs('post-pdf', $fileName);
+            }
+
             Transaction::create($input);
             StockTransaction::create([
                 'invoice_number' => $input['invoice_number'],
@@ -54,7 +63,7 @@ class TransactionController extends Controller
                 'qty' => $input['qty'],
             ]);
 
-            $stock = StockTransaction::where('invoice_number', $input['invoice_number'])->get()->first();
+            $stock = StockTransaction::where('products_id', $input['products_id'])->get()->first();
             Product::where('id', $input['products_id'])->decrement('qty', $stock->qty);
 
             return redirect()->route('transaction.index')->with('success', 'Data berhasil ditambah!');
@@ -83,7 +92,10 @@ class TransactionController extends Controller
 
         $data = Transaction::findOrFail($id);
 
-        $stock = StockTransaction::where('invoice_number', $invoice_number)->get()->first();
+        Storage::disk('public')->delete('post-pdf/' . $data['file']);
+        $data->delete();
+
+        $stock = StockTransaction::where('products_id', $product_id)->get()->first();
         Product::where('id', $product_id)->increment('qty', $stock->qty);
 
         StockTransaction::where('invoice_number', $invoice_number)->delete();

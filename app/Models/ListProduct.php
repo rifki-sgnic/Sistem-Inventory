@@ -17,4 +17,9 @@ class ListProduct extends Model
     {
         return $this->belongsTo(RequestProduct::class, 'request_products_id', 'id');
     }
+
+    public function suppliers()
+    {
+        return $this->belongsTo(Supplier::class, 'suppliers_id', 'id');
+    }
 }

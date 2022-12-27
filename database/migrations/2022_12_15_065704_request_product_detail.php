@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('qty');
             $table->integer('harga');
             $table->string('remarks');
+            $table->text('note')->nullable();
             $table->timestamps();
         });
     }

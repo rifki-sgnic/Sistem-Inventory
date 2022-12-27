@@ -50,6 +50,7 @@
               <th>Produk</th>
               <th>Qty</th>
               <th>PIC</th>
+              <th>File</th>
               <th>Note</th>
               <th>Action</th>
             </tr>
@@ -71,7 +72,7 @@
         </div>
 
         <!-- Modal body -->
-        <form action="{{ route('transaction.tambah') }}" method="post">
+        <form action="{{ route('transaction.tambah') }}" method="post" enctype="multipart/form-data">
           @csrf
           <div class="modal-body">
             <div class="form-group">
@@ -94,6 +95,13 @@
             <div class="form-group">
               <label for="tanggal">Tanggal</label>
               <input type="date" name="created_at" id="tanggal" placeholder="tanggal" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="fileInput">File</label>
+              <div id="fileInput" class="custom-file">
+                <input type="file" class="form-control" name="file" id="file" accept="application/pdf" required>
+                <label class="custom-file-label" for="file">Choose file</label>
+              </div>
             </div>
             <div class="form-group">
               <label for="note">Noted</label>
@@ -123,7 +131,7 @@
         </div>
 
         <!-- Modal body -->
-        <form action="{{ route('transaction.update') }}" method="post">
+        <form action="{{ route('transaction.update') }}" method="post" enctype="multipart/form-data">
           @csrf
           <div class="modal-body">
             <div class="form-group">
@@ -147,6 +155,13 @@
             <div class="form-group">
               <label for="tanggal">Tanggal</label>
               <input type="date" name="created_at" id="tanggal" placeholder="tanggal" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="fileInput">File</label>
+              <div id="fileInput" class="custom-file">
+                <input type="file" class="form-control" name="file" id="file" accept="application/pdf">
+                <label class="custom-file-label" for="file">Choose file</label>
+              </div>
             </div>
             <div class="form-group">
               <label for="note">Noted</label>

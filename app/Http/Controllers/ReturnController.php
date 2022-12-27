@@ -22,7 +22,7 @@ class ReturnController extends Controller
         if ($request->ajax()) {
             $data = ReturnProduct::with('products', 'list_products')->get();
 
-            if ($role == 'admin' || $role == 'superadmin') {
+            if ($role == 'admin' || $role == 'superadmin' || $role == 'testing') {
                 return DataTables::of($data)
                     ->addColumn('status', function ($data) {
                         $label = '<span id="label_status" class="btn btn-sm btn-' . $this->statusLabel($data) . ' disabled">' . ucwords($data['status']) . '</span>';

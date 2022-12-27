@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\RequestProduct;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\RequestProductDetail;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -58,5 +60,63 @@ class RequestProductController extends Controller
         RequestProduct::where('no_purchase_request', $request['no_purchase_request'])->update(['status' => $request['status'], 'comment' => $request['comment']]);
 
         return redirect()->route('request-barang.index')->with('success', 'Status berhasil diupdate');
+    }
+
+    public function updateDetailProduct(Request $request)
+    {
+        $input = $request->all();
+        $no_pr = $input['no_purchase_request'];
+
+        RequestProductDetail::where('id', $input['id'])->update(['qty' => $input['qty'], 'harga' => $input['harga'], 'remarks' => $input['remarks']]);
+
+        return redirect()->route('request-barang.detail', ['id' => $no_pr])->with('success', 'Produk berhasil diupdate');
+    }
+
+    public function deleteDetailProduct(Request $request)
+    {
+        $no_pr = $request['no_purchase_request'];
+        $id = $request['id'];
+        $data = RequestProductDetail::findOrFail($id);
+
+        $data->delete();
+
+        return redirect()->route('request-barang.detail', ['id' => $no_pr])->with('success', 'Produk berhasil dihapus');
+    }
+
+    public function addNoteDetailProduct(Request $request)
+    {
+        $input = $request->all();
+        $no_pr = $request['no_purchase_request'];
+
+        RequestProductDetail::where('id', $input['id'])->update(['note' => $input['note']]);
+
+        return redirect()->route('request-barang.detail', ['id' => $no_pr])->with('success', 'Note berhasil ditambahkan');
+    }
+
+    public function cetakPdf(Request $request)
+    {
+        $startDate = Carbon::createFromFormat('Y-m-d H', $request['start_date'] . '0')->startOfDay()->toDateTimeString();
+        $endDate = Carbon::createFromFormat('Y-m-d H', $request['end_date'] . '23')->endOfDay()->toDateTimeString();
+
+        if (!$request['status']) {
+            /* All Status */
+            $result = RequestProduct::whereBetween('created_at', [$startDate, $endDate])->get();
+        } else {
+            /* Selected Status */
+            $result = RequestProduct::select()->where([
+                ['status', '=', $request['status']],
+                ['created_at', '>=', $startDate],
+                ['created_at', '<=', $endDate]
+            ])->get();
+        }
+
+
+        $pdf = Pdf::loadView('request-barang.request_pdf', [
+            'requests' => $result,
+            'startDate' => Carbon::parse($startDate)->isoFormat('DD MMMM YYYY'),
+            'endDate' => Carbon::parse($endDate)->isoFormat('DD MMMM YYYY'),
+        ]);
+
+        return $pdf->stream();
     }
 }

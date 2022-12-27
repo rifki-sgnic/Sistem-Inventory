@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Product;
 use App\Models\Receive;
+use App\Models\Supplier;
 use App\Models\ListProduct;
 use Illuminate\Http\Request;
 use App\Models\RequestProduct;
@@ -22,14 +23,22 @@ class ListProductController extends Controller
         $role = auth()->user()->roles->pluck('name')->first();
 
         if ($request->ajax()) {
-            $data = ListProduct::with('request_products')->get();
+            $data = ListProduct::with('request_products', 'suppliers')->get();
 
             switch ($role) {
                 case 'admin':
                 case 'superadmin':
+                case 'testing':
                     return DataTables::of($data)
                         ->addColumn('no_pre_order', function ($data) {
                             return is_null($data['no_pre_order']) ? '-' : $data['no_pre_order'];
+                        })
+                        ->addColumn('supplier', function ($data) {
+                            if (isset($data['suppliers']->kd_supplier)) {
+                                return $data['suppliers']->kd_supplier . ' - ' . $data['suppliers']->nama_supplier;
+                            } else {
+                                return '-';
+                            }
                         })
                         ->addColumn('status', function ($data) {
                             $label = '<span id="label_status" class="btn btn-sm btn-' . $this->statusLabel($data) . ' disabled">' . ucwords($data['status']) . '</span>';
@@ -47,6 +56,13 @@ class ListProductController extends Controller
                     return DataTables::of($data)
                         ->addColumn('no_pre_order', function ($data) {
                             return is_null($data['no_pre_order']) ? '-' : $data['no_pre_order'];
+                        })
+                        ->addColumn('supplier', function ($data) {
+                            if (isset($data['suppliers']->kd_supplier)) {
+                                return $data['suppliers']->kd_supplier . ' - ' . $data['suppliers']->nama_supplier;
+                            } else {
+                                return '-';
+                            }
                         })
                         ->addColumn('status', function ($data) {
                             $add_btn = '<div id="add-status" class="d-flex justify-content-center">
@@ -71,31 +87,35 @@ class ListProductController extends Controller
 
                             return is_null($data['no_pre_order']) ? '-' : $edit_btn;
                         })
+                        ->addColumn('supplier', function ($data) {
+                            if (isset($data['suppliers']->kd_supplier)) {
+                                $edit_btn =
+                                '<div id="edit-sp" class="d-flex justify-content-center align-items-center">
+                                <div id="no_po" class="flex-fill">' . $data['suppliers']->kd_supplier . ' - ' . $data['suppliers']->nama_supplier . '</div>
+                                <button type="button" id="edit_supplier" value="edit_supplier" class="btn btn-sm btn-warning mx-1"><i class="fa fa-pen text-white"></i></button>
+                                </div>';
+
+                                return $edit_btn;
+                            } else {
+                                $add_btn = '<div id="add-supplier" class="d-flex justify-content-center">
+                                    <button type="button" id="edit_supplier" value="edit_supplier" class="btn btn-sm btn-primary"><i class="fa fa-plus text-white"></i></button>
+                                    </div>';
+
+                                return $add_btn;
+                            }
+                        })
                         ->addColumn('status', function ($data) {
                             $label = '<span id="label_status" class="btn btn-sm btn-' . $this->statusLabel($data) . ' disabled">' . ucwords($data['status']) . '</span>';
                             return is_null($data['status']) ? '-' : $label;
                         })
-                        ->rawColumns(['no_pre_order', 'status'])
-                        ->make(true);
-                case 'trm':
-                    return DataTables::of($data)
-                        ->addColumn('no_pre_order', function ($data) {
-                            return is_null($data['no_pre_order']) ? '-' : $data['no_pre_order'];
-                        })
-                        ->addColumn('status', function ($data) {
-                            $label = '<span id="label_status" class="btn btn-sm btn-' . $this->statusLabel($data) . ' disabled">' . ucwords($data['status']) . '</span>';
-                            return is_null($data['status']) ? '-' : $label;
-                        })
-                        ->rawColumns(['no_pre_order', 'status'])
+                        ->rawColumns(['no_pre_order', 'status', 'supplier'])
                         ->make(true);
             }
         }
 
-        // $data = ListProduct::with('request_products', 'request_products.request_product_detail')->whereId(1)->get()->first();
-        // dd($data);
-
         return view('list-barang.listbarang', [
             'title' => 'List Barang',
+            'suppliers' => Supplier::all(),
             'req_products' => RequestProduct::select()->where('status', '=', 'approved')->get(),
         ]);
     }
@@ -106,7 +126,7 @@ class ListProductController extends Controller
 
         if ($data['status'] == 'receive') {
             $btn_class = 'success';
-        } else if ($data['status'] == 'indend') {
+        } else if ($data['status'] == 'indent') {
             $btn_class = 'primary';
         }
         return $btn_class;
@@ -151,7 +171,7 @@ class ListProductController extends Controller
         if ($request['status'] == 'receive') {
             $data = ListProduct::with('request_products', 'request_products.request_product_detail')->whereId($request['id'])->get()->first();
             $invoice = IdGenerator::generate(['table' => 'receives', 'field' => 'invoice_number', 'length' => 8, 'prefix' => 'BM-']);
-            $selectedProduct = collect($data->request_products->request_product_detail)->map(function ($value) use($invoice) {
+            $selectedProduct = collect($data->request_products->request_product_detail)->map(function ($value) use($invoice, $input) {
 
                 StockTransaction::create([
                     'invoice_number' => $invoice,
@@ -159,13 +179,14 @@ class ListProductController extends Controller
                     'qty' => $value['qty'],
                 ]);
 
-                $stock = StockTransaction::where('invoice_number', $invoice)->get()->first();
+                $stock = StockTransaction::where('products_id', $value['products_id'])->get()->first();
                 Product::where('id', $value['products_id'])->increment('qty', $stock->qty);
 
                 return [
                     'invoice_number' => $invoice,
                     'products_id' => $value['products_id'],
                     'qty' => $value['qty'],
+                    'suppliers_id' => $input['suppliers_id'],
                     'created_at' => $value['created_at'],
                     'updated_at' => $value['updated_at']
                 ];
@@ -190,7 +211,7 @@ class ListProductController extends Controller
                     'qty' => $value['qty'],
                 ]);
 
-                $stock = StockTransaction::where('invoice_number', $invoice)->get()->first();
+                $stock = StockTransaction::where('products_id', $value['products_id'])->get()->first();
                 Product::where('id', $value['products_id'])->increment('qty', $stock->qty);
 
                 return [
@@ -213,6 +234,13 @@ class ListProductController extends Controller
         return ListProduct::whereId($request['id'])->update(['no_pre_order' => $request['no_pre_order']]);
     }
 
+    public function updateSupplier(Request $request)
+    {
+        ListProduct::whereId($request['id'])->update(['suppliers_id' => $request['suppliers_id']]);
+
+        return redirect()->route('list-barang.index')->with('success', 'Supplier berhasil diupdate!');
+    }
+
     public function hapus(Request $request)
     {
         $id = $request->input('id');
@@ -232,10 +260,10 @@ class ListProductController extends Controller
 
         if (!$request['status']) {
             /* All Status */
-            $result = ListProduct::whereBetween('created_at', [$startDate, $endDate])->get();
+            $result = ListProduct::with('request_products')->whereBetween('created_at', [$startDate, $endDate])->get();
         } else {
             /* Selected Status */
-            $result = ListProduct::select()->where([
+            $result = ListProduct::with('request_products')->where([
                 ['status', '=', $request['status']],
                 ['created_at', '>=', $startDate],
                 ['created_at', '<=', $endDate]

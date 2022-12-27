@@ -30,10 +30,12 @@
       </div>
       @endif
 
+      @hasrole('superadmin|purchasing|testing')
       <div class="d-flex flex-row mb-3">
         <button class="btn btn-sm btn-primary mx-1" data-toggle="modal" data-target="#modalTambahData"><i class="fa fa-plus text-white"></i> Tambah Data</button>
         <button class="btn btn-sm btn-success mx-1" data-toggle="modal" data-target="#modalCetakData"><i class="fa fa-print text-white"></i> Cetak Data</button>
       </div>
+      @endhasrole
 
       <div class="table-responsive-sm">
         <table id="tableSupplier" class="table table-bordered text-center table-hover w-100 table-sm">

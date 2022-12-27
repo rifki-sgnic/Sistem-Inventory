@@ -48,12 +48,16 @@ class UserController extends Controller
         ]);
 
         $input = $request->except(['_token', 'submit']);
+        $user = User::find($request->id);
+
         if ($input['password'] != null) {
             $input['password'] = bcrypt($request->password);
+
+            $user->update($input);
+        } else {
+            $user->update(['name' => $input['name'], 'username' => $input['username'], 'role' => $input['role']]);
         }
 
-        $user = User::find($request->id);
-        $user->update($input);
 
         DB::table('model_has_roles')->where('model_id', $input['id'])->delete();
         $user->assignRole($input['role']);

@@ -22,7 +22,7 @@ class UserRoleSeeder extends Seeder
         try {
             $admin = User::create(
                 [
-                    'name' => 'Manager',
+                    'name' => 'Admin IT',
                     'username' => 'Admin',
                     'password' => bcrypt('123'),
                 ]
@@ -30,7 +30,7 @@ class UserRoleSeeder extends Seeder
 
             $superadmin = User::create(
                 [
-                    'name' => 'Admin Sistem',
+                    'name' => 'Manager',
                     'username' => 'Superadmin',
                     'password' => bcrypt('123'),
                 ]
@@ -52,19 +52,19 @@ class UserRoleSeeder extends Seeder
                 ]
             );
 
-            $trm = User::create(
+            $testing = User::create(
                 [
-                    'name' => 'TRM',
-                    'username' => 'trm',
+                    'name' => 'Testing',
+                    'username' => 'Test',
                     'password' => bcrypt('123'),
                 ]
-            );
+                );
 
             $role_admin = Role::create(['name' => 'admin']);
             $role_superadmin = Role::create(['name' => 'superadmin']);
             $role_warehouse = Role::create(['name' => 'warehouse']);
             $role_purchasing = Role::create(['name' => 'purchasing']);
-            $role_trm = Role::create(['name' => 'trm']);
+            $role_testing = Role::create(['name' => 'testing']);
 
             $permissions = [
                 [
@@ -91,7 +91,9 @@ class UserRoleSeeder extends Seeder
             $superadmin->assignRole('superadmin');
             $warehouse->assignRole('warehouse');
             $purchasing->assignRole('purchasing');
-            $trm->assignRole('trm');
+
+            $testing->assignRole('testing');
+            $role_testing->givePermissionTo(Permission::all());
 
             DB::commit();
         } catch (\Throwable $th) {

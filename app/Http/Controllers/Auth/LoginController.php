@@ -63,11 +63,11 @@ class LoginController extends Controller
                 return redirect()->route('dashboard');
             } else if ($role == 'superadmin') {
                 return redirect()->route('dashboard');
+            } else if ($role == 'testing') {
+                return redirect()->route('dashboard');
             } else if ($role == 'warehouse') {
                 return redirect()->route('list-barang.index');
             } else if ($role == 'purchasing') {
-                return redirect()->route('list-barang.index');
-            } else if ($role == 'trm') {
                 return redirect()->route('list-barang.index');
             } else {
                 abort(403);

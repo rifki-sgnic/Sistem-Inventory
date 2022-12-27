@@ -28,7 +28,7 @@
       </div>
       @endif
 
-      @hasrole('admin|superadmin')
+      @hasrole('admin|superadmin|testing')
       <div class="d-flex flex-row mb-3">
         <button class="btn btn-sm btn-primary mx-1" data-toggle="modal" data-target="#modalTambahData"><i
             class="fa fa-plus text-white"></i> Tambah Data</button>
@@ -46,6 +46,7 @@
               <th>No Purchase Request</th>
               <th>No Pre Order</th>
               <th>File</th>
+              <th>Supplier</th>
               <th>Status</th>
               <th>Action</th>
             </tr>
@@ -85,11 +86,12 @@
               <input type="text" name="no_pre_order" placeholder="No Pre Order" class="form-control">
             </div>
             <div class="form-group">
-              <label for="status">Status</label>
-              <select name="status" id="status" class="form-control">
-                <option value="">Pilih Status ...</option>
-                <option value="receive">Receive</option>
-                <option value="indend">Indend</option>
+              <label for="supplier">Supplier</label>
+              <select name="suppliers_id" id="supplier" class="form-control">
+                <option value="">Pilih supplier ...</option>
+                @foreach ($suppliers as $supplier)
+                <option value="{{ $supplier->id }}">{{ $supplier->kd_supplier . ' - ' . $supplier->nama_supplier }}</option>
+                @endforeach
               </select>
             </div>
             <div class="form-group">
@@ -138,13 +140,25 @@
               <input type="text" name="no_pre_order" placeholder="No Pre Order" class="form-control">
             </div>
             <div class="form-group">
+              <label for="supplier">Supplier</label>
+              <select name="suppliers_id" id="supplier" class="form-control">
+                <option value="">Pilih supplier ...</option>
+                @foreach ($suppliers as $supplier)
+                <option value="{{ $supplier->id }}">{{ $supplier->kd_supplier . ' - ' . $supplier->nama_supplier }}
+                </option>
+                @endforeach
+              </select>
+            </div>
+            @hasrole('testing')
+            <div class="form-group">
               <label for="status">Status</label>
               <select name="status" id="status" class="form-control">
                 <option value="">Pilih Status ...</option>
                 <option value="receive">Receive</option>
-                <option value="indend">Indend</option>
+                <option value="indent">Indent</option>
               </select>
             </div>
+            @endhasrole
             <div class="form-group">
               <label for="created_at">Tanggal</label>
               <input type="date" name="created_at" placeholder="tanggal" class="form-control">
@@ -242,6 +256,45 @@
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             <button type="submit" class="btn btn-primary" name="submit">Cetak Data</button>
           </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Tambah Supplier Data Penerimaan -->
+  <div class="modal" id="modalTambahSupplier">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Update Supplier Penerimaan Barang</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <form action="{{ route("list-barang.update-supplier") }}" method="POST" enctype="multipart/form-data">
+          @csrf
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="supplier">Supplier</label>
+              <select name="suppliers_id" id="supplier" class="form-control">
+                <option value="">Pilih supplier ...</option>
+                @foreach ($suppliers as $supplier)
+                <option value="{{ $supplier->id }}">{{ $supplier->kd_supplier . ' - ' . $supplier->nama_supplier }}
+                </option>
+                @endforeach
+              </select>
+            <input type="hidden" name="id" required readonly>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" name="submit">Simpan</button>
+          </div>
+
         </form>
 
       </div>

@@ -8,7 +8,7 @@
     <div class="sidebar-brand-text mx-3">Inventory<sup>App</sup></div>
   </a>
 
-  @hasrole('admin|superadmin')
+  @hasrole('admin|superadmin|testing')
   <!-- Divider -->
   <hr class="sidebar-divider my-0">
 
@@ -19,7 +19,7 @@
       <span>{{ __('Dashboard') }}</span>
     </a>
   </li>
-
+  @endhasrole
   <!-- Divider -->
   <hr class="sidebar-divider my-0">
 
@@ -28,6 +28,7 @@
     {{ __('Interface') }}
   </div> --}}
 
+  @hasrole('admin|superadmin|purchasing|testing')
   <!-- Nav Item - Pages Collapse Menu -->
   <li class="nav-item {{ Nav::isRoute('master.index') }} {{ Nav::isRoute('supplier.index') }}">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#master" aria-expanded="true"
@@ -37,11 +38,15 @@
     </a>
     <div id="master" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
+        @hasrole('admin|superadmin|testing')
         <a class="collapse-item" href="{{ route('master.index') }}">Data Master Barang</a>
+        @endhasrole
+        @hasrole('admin|superadmin|purchasing|testing')
         <a class="collapse-item" href="{{ route('supplier.index') }}">Data Supplier</a>
+        @endhasrole
+        </div>
       </div>
-    </div>
-  </li>
+    </li>
   @endhasrole
 
   <hr class="sidebar-divider my-0">
@@ -53,15 +58,15 @@
     </a>
     <div id="outgoing" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
-        @hasrole('admin|superadmin|purchasing|')
+        @hasrole('admin|superadmin|purchasing|testing')
         <a class="collapse-item" href="{{ route('request-barang.index') }}">Data Request Barang</a>
         @endhasrole
         <a class="collapse-item" href="{{ route('list-barang.index') }}">List Penerimaan Barang</a>
-        @hasrole('admin|superadmin')
+        @hasrole('admin|superadmin|testing')
         <a class="collapse-item" href="{{ route('receive.index') }}">Data Barang Masuk</a>
         <a class="collapse-item" href="{{ route('transaction.index') }}">Data Barang Keluar</a>
         @endhasrole
-        @hasrole('admin|superadmin|trm')
+        @hasrole('admin|superadmin|purchasing|testing')
         <a class="collapse-item" href="{{ route('return.index') }}">Return</a>
         @endhasrole
       </div>
@@ -71,7 +76,7 @@
   <!-- Divider -->
   <hr class="sidebar-divider my-0">
 
-  @role ('admin')
+  @role ('superadmin|testing')
   <!-- Nav Item - Utilities Collapse Menu -->
   <li class="nav-item {{ Nav::isRoute('admin.user-management') }}">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#user" aria-expanded="true"

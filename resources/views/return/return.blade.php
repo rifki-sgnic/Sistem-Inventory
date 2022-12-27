@@ -29,7 +29,7 @@
       @endif
 
       <div class="d-flex flex-row mb-3">
-        @hasrole('admin|superadmin')
+        @hasrole('admin|superadmin|testing')
         <button class="btn btn-sm btn-primary mx-1" data-toggle="modal" data-target="#modalTambahData"><i
             class="fa fa-plus text-white"></i> Tambah Data</button>
         @endhasrole
@@ -130,16 +130,16 @@
         <form action="{{ route('return.update') }}" method="post">
           @csrf
           <div class="modal-body">
-            <div class="form-group">
+            {{-- <div class="form-group">
               <label for="no_pre_order">No Pre Order</label>
-              <select name="no_pre_order" id="no_pre_order" class="form-control" required>
+              <select name="list_products_id" id="no_pre_order" class="form-control" required>
                 <option value="">Pilih no po ...</option>
                 @foreach ($list_products as $list_product)
                 <option value="{{ $list_product->id }}">{{ $list_product->no_pre_order }}
                 </option>
                 @endforeach
               </select>
-            </div>
+            </div> --}}
             <div class="form-group">
               <label for="produk">Produk</label>
               <select name="products_id" id="produk" class="form-control" required>
@@ -159,10 +159,19 @@
               <input type="date" name="created_at" id="tanggal" placeholder="tanggal" class="form-control">
             </div>
             <div class="form-group">
+              <label for="status">Status</label>
+              <select name="status" id="status" class="form-control">
+                <option value="">Pilih Status ...</option>
+                <option value="done resolved">Done Resolved</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
+            <div class="form-group">
               <label for="note">Noted</label>
               <textarea class="form-control" name="note" id="note" rows="3"></textarea>
             </div>
             <input type="hidden" name="id" required readonly>
+            <input type="hidden" name="list_products_id" required readonly>
           </div>
 
           <div class="modal-footer">
@@ -226,7 +235,6 @@
               <div class="col-sm-5">
                 <select id="status" name="status" class="form-control">
                   <option value="">All Status</option>
-                  <option value="on progress">On Progress</option>
                   <option value="done resolved">Done Resolved</option>
                   <option value="rejected">Rejected</option>
                 </select>

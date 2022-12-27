@@ -69,11 +69,23 @@ var tableSupplier = $("#tableSupplier").DataTable({
         { data: "no_tlp" },
         { data: "alamat" },
         {
-            data: null,
+            data: "action",
             defaultContent: `
-                <button type="button" value="update" class="btn btn-sm btn-warning"><i class="fa fa-pen text-white"></i> Edit</button>
-                <button type="button" value="delete" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</button>
+                <button type="button" value="update" class="btn btn-sm btn-warning" disabled><i class="fa fa-pen text-white"></i> Edit</button>
+                <button type="button" value="delete" class="btn btn-sm btn-danger" disabled><i class="fa fa-trash"></i> Delete</button>
                 `,
+        },
+    ],
+    columnDefs: [
+        {
+            targets: [5],
+            render: function (data, type, row, meta) {
+                if (row.action != undefined) {
+                    return row.action;
+                } else {
+                    tableSupplier.columns([5]).visible(false);
+                }
+            },
         },
     ],
 });
@@ -134,6 +146,7 @@ var tableListBarang = $("#tableListBarang").DataTable({
                 return `<a href="storage/post-pdf/${data.file}">${data.file}</a>`;
             },
         },
+        { data: "supplier" },
         { data: "status" },
         {
             data: "action",
@@ -145,12 +158,12 @@ var tableListBarang = $("#tableListBarang").DataTable({
     ],
     columnDefs: [
         {
-            targets: [7],
+            targets: [8],
             render: function (data, type, row, meta) {
                 if (row.action != undefined) {
                     return row.action;
                 } else {
-                    tableListBarang.columns([7]).visible(false);
+                    tableListBarang.columns([8]).visible(false);
                 }
             },
         },
@@ -168,6 +181,9 @@ $("#tableListBarang tbody").on("click", "button", function () {
         $("#modalUpdateData")
             .find("input[name='no_pre_order']")
             .val(data["no_pre_order"]);
+        $("#modalUpdateData")
+            .find("select[name='suppliers_id']")
+            .val(data["suppliers_id"]);
         $("#modalUpdateData")
             .find("select[name='status']")
             .val($(data["status"]).text().toLowerCase().trim());
@@ -188,7 +204,7 @@ $("#tableListBarang tbody").on("click", "button", function () {
         $("#modalHapusData").find("input[name='id']").val(data["id"]);
         $("#modalHapusData").modal("show");
     } else if ($(this).prop("value") == "add_status") {
-        var value = ["", "Receive", "Indend"];
+        var value = ["", "Receive", "Indent"];
         var parent = $(this).closest("tr").find("#add-status");
 
         $.each(parent, function () {
@@ -215,7 +231,7 @@ $("#tableListBarang tbody").on("click", "button", function () {
             parent.append(closeBtn);
         });
     } else if ($(this).prop("value") == "edit_status") {
-        var value = ["", "Receive", "Indend"];
+        var value = ["", "Receive", "Indent"];
         var parent = $(this).closest("tr").find("#edit-status");
 
         $.each(parent, function () {
@@ -304,6 +320,13 @@ $("#tableListBarang tbody").on("click", "button", function () {
                     });
                 });
         });
+    } else if ($(this).prop("value") == "edit_supplier") {
+        $("#modalTambahSupplier")
+            .find("select[name='suppliers_id']")
+            .val(data["suppliers_id"]);
+
+        $("#modalTambahSupplier").find("input[name='id']").val(data["id"]);
+        $("#modalTambahSupplier").modal("show");
     } else if ($(this).prop("value") == "close_btn") {
         var parent = $(this).closest("tr");
 
@@ -458,6 +481,12 @@ var tableTransaction = $("#tableTransaction").DataTable({
         },
         { data: "qty" },
         { data: "pic" },
+        {
+            data: null,
+            render: function (data, type, full, meta) {
+                return `<a href="storage/post-pdf/${data.file}">${data.file}</a>`;
+            },
+        },
         { data: "note" },
         {
             data: null,
@@ -573,14 +602,18 @@ $("#tableBarangReturn tbody").on("click", "button", function () {
             .val(data["products_id"]);
         $("#modalUpdateData").find("input[name='qty']").val(data["qty"]);
         $("#modalUpdateData")
-            .find("select[name='no_pre_order']")
-            .val(data["list_products_id"]);
+            .find("select[name='status']")
+            .val($(data["status"]).text().toLowerCase().trim());
         $("#modalUpdateData")
             .find("input[name='created_at']")
             .val(moment(data["created_at"]).format("yyyy-MM-DD"));
         $("#modalUpdateData").find("textarea[name='note']").val(data["note"]);
 
         $("#modalUpdateData").find("input[name='id']").val(data["id"]);
+        $("#modalUpdateData")
+            .find("input[name='list_products_id']")
+            .val(data["list_products_id"]);
+
         $("#modalUpdateData").modal("show");
     } else if ($(this).prop("value") == "delete") {
         $("#modalHapusData").find("p strong").html(data["invoice_number"]);
@@ -593,7 +626,7 @@ $("#tableBarangReturn tbody").on("click", "button", function () {
             .val(data["invoice_number"]);
         $("#modalHapusData").modal("show");
     } else if ($(this).prop("value") == "add_status") {
-        var value = ["", "On Progress", "Done Resolved", "Rejected"];
+        var value = ["", "Done Resolved", "Rejected"];
         var parent = $(this).closest("tr").find("#add");
 
         $.each(parent, function () {
@@ -620,7 +653,7 @@ $("#tableBarangReturn tbody").on("click", "button", function () {
             parent.append(closeBtn);
         });
     } else if ($(this).prop("value") == "edit_status") {
-        var value = ["", "On Progress", "Done Resolved", "Rejected"];
+        var value = ["", "Done Resolved", "Rejected"];
 
         var parent = $(this).closest("tr").find("#edit");
 

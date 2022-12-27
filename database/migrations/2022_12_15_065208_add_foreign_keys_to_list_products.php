@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::table('list_products', function (Blueprint $table) {
             $table->foreign('request_products_id', 'fk_list_products_to_request_products')->references('id')->on('request_products')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('suppliers_id', 'fk_list_products_to_suppliers')->references('id')->on('suppliers')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 
@@ -27,6 +28,7 @@ return new class extends Migration
     {
         Schema::table('list_products', function (Blueprint $table) {
             $table->dropForeign('fk_list_products_to_request_products');
+            $table->dropForeign('fk_list_products_to_suppliers');
         });
     }
 };

@@ -20,7 +20,7 @@ class DashboardController extends Controller
     {
         $role = auth()->user()->roles->pluck('name')->first();
 
-        if ($role == 'admin' || $role == 'superadmin') {
+        if ($role == 'admin' || $role == 'superadmin' || $role == 'testing') {
             $data_stock = Product::sum('qty');
             $data_receive = Receive::sum('qty');
             $data_transaction = Transaction::sum('qty');

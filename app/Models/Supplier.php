@@ -18,4 +18,9 @@ class Supplier extends Model
     {
         return $this->hasMany(Receive::class, 'suppliers_id');
     }
+
+    public function list_products()
+    {
+        return $this->hasMany(ListProduct::class, 'suppliers_id');
+    }
 }

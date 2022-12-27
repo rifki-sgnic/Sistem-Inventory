@@ -18,8 +18,9 @@ return new class extends Migration
             $table->string('invoice_number');
             $table->foreignId('request_products_id')->index('fk_list_products_to_request_products');
             $table->string('no_pre_order')->nullable();
-            $table->enum('status', ['receive', 'indend'])->nullable();
+            $table->enum('status', ['receive', 'indent'])->nullable();
             $table->string('file')->nullable();
+            $table->foreignId('suppliers_id')->index('fk_list_products_to_suppliers')->nullable();
             $table->timestamps();
         });
     }

@@ -224,31 +224,52 @@ tableRequest.on("click", "button", function () {
 
 var tableDetailRequest = $("#tableDetailRequest");
 var listDetailRequest = [];
-var barangDetailRequest = {}
+var barangDetailRequest = {};
 tableDetailRequest.find("tbody").on("click", "button", function () {
-    var data = $(this).closest("tr");
+    var row = $(this).closest("tr");
+    var data = row.find("td");
+
+    console.log(data)
+
+    var produk = data[1].innerHTML;
+    var jumlah = data[2].innerHTML;
+    var harga = data[3].innerHTML;
+    var remarks = data[4].innerHTML;
+    var id = data[5].innerHTML;
+    var note = data[6].text;
+
+    // barangDetailRequest = {
+    //     products_id: produk,
+    //     qty: jumlah,
+    //     harga: harga,
+    //     remarks: remarks,
+    // };
+    // console.log(barangDetailRequest.products_id);
+
+    // listDetailRequest.push(barangDetailRequest)
+    // console.log(listDetailRequest);
 
     // console.log(data.find)
 
-    // if ($(this).prop("value") == "update") {
-    //     var produk = data.find("#produk").text();
-    //     var qty = data.find("#qty").text();
-    //     console.log(qty);
+    if ($(this).prop("value") == "update") {
+        // var produk = data.find("#produk").text();
+        // var qty = data.find("#qty").text();
+        // console.log(qty);
 
-    //     $("#modalUpdateData").find('input[name="produk"]').val(produk);
-    //     $("#modalUpdateData").find('input[name="qty"]').val(qty);
-    //     $("#modalUpdateData").modal("show");
-    // } else if($(this).prop('value') == 'delete') {
-    //     var data = $(this).closest("tr");
+        $("#modalUpdateData").find('input[name="produk"]').val(produk);
+        $("#modalUpdateData").find('input[name="qty"]').val(jumlah);
+        $("#modalUpdateData").find('input[name="harga"]').val(harga);
+        $("#modalUpdateData").find('input[name="remarks"]').val(remarks);
+        $("#modalUpdateData").find('input[name="id"]').val(id);
+        $("#modalUpdateData").modal("show");
+    } else if ($(this).prop("value") == "delete") {
+        $("#modalHapusData").find("p strong").html(produk);
 
-    //     if ($(this).prop("id") == "btn_delete") {
-    //         list_barang.splice(
-    //             list_barang.findIndex(
-    //                 ({ product }) => product == data.find("td:eq(1)").text()
-    //             ),
-    //             1
-    //         );
-    //         data.remove();
-    //     }
-    // }
+        $("#modalHapusData").find("input[name='id']").val(id);
+        $("#modalHapusData").modal("show");
+    } else if ($(this).prop("value") == "add-note") {
+        $("#modalAddNote").find("textarea[name='note']").val(note);
+        $("#modalAddNote").find("input[name='id']").val(id);
+        $("#modalAddNote").modal("show");
+    }
 });
