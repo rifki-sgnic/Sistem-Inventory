@@ -613,6 +613,9 @@ $("#tableBarangReturn tbody").on("click", "button", function () {
         $("#modalUpdateData")
             .find("input[name='list_products_id']")
             .val(data["list_products_id"]);
+        $("#modalUpdateData")
+            .find("input[name='invoice_number']")
+            .val(data["invoice_number"]);
 
         $("#modalUpdateData").modal("show");
     } else if ($(this).prop("value") == "delete") {

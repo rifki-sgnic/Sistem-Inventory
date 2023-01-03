@@ -130,16 +130,6 @@
         <form action="{{ route('return.update') }}" method="post">
           @csrf
           <div class="modal-body">
-            {{-- <div class="form-group">
-              <label for="no_pre_order">No Pre Order</label>
-              <select name="list_products_id" id="no_pre_order" class="form-control" required>
-                <option value="">Pilih no po ...</option>
-                @foreach ($list_products as $list_product)
-                <option value="{{ $list_product->id }}">{{ $list_product->no_pre_order }}
-                </option>
-                @endforeach
-              </select>
-            </div> --}}
             <div class="form-group">
               <label for="produk">Produk</label>
               <select name="products_id" id="produk" class="form-control" required>
@@ -158,6 +148,7 @@
               <label for="tanggal">Tanggal</label>
               <input type="date" name="created_at" id="tanggal" placeholder="tanggal" class="form-control">
             </div>
+            @hasrole('testing')
             <div class="form-group">
               <label for="status">Status</label>
               <select name="status" id="status" class="form-control">
@@ -166,12 +157,14 @@
                 <option value="rejected">Rejected</option>
               </select>
             </div>
+            @endhasrole
             <div class="form-group">
               <label for="note">Noted</label>
               <textarea class="form-control" name="note" id="note" rows="3"></textarea>
             </div>
             <input type="hidden" name="id" required readonly>
             <input type="hidden" name="list_products_id" required readonly>
+            <input type="hidden" name="invoice_number" required readonly>
           </div>
 
           <div class="modal-footer">

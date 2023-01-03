@@ -109,6 +109,11 @@ class ReturnController extends Controller
             'list_products_id' => 'required',
         ]);
 
+        if (isset($request['status'])) {
+            $stock = StockTransaction::where('invoice_number', $request['invoice_number'])->get()->first();
+            Product::where('id', $request['products_id'])->increment('qty', $stock->qty);
+        }
+
         $input = $request->except(['_token', 'submit']);
 
         ReturnProduct::whereId($request->id)->update($input);
@@ -117,10 +122,7 @@ class ReturnController extends Controller
 
     public function updateStatus(Request $request)
     {
-        if ($request['status'] == 'on progress') {
-            $stock = StockTransaction::where('invoice_number', $request['invoice_number'])->get()->first();
-            Product::where('id', $request['product_id'])->decrement('qty', $stock->qty);
-        } else if ($request['status'] == 'done resolved') {
+        if (isset($request['status'])) {
             $stock = StockTransaction::where('invoice_number', $request['invoice_number'])->get()->first();
             Product::where('id', $request['product_id'])->increment('qty', $stock->qty);
         }
