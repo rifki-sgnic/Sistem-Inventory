@@ -83,7 +83,7 @@
             </table>
           </div>
         </div>
-        @hasrole('admin|testing')
+        @hasrole('superadmin|testing')
         <div class="col">
           <form action="{{ route('request-barang.update-status') }}" method="POST">
             @csrf
@@ -104,7 +104,7 @@
           </form>
         </div>
         @endhasrole
-        @hasrole('superadmin|purchasing')
+        @hasrole('admin|purchasing')
         <div class="col">
           <div class="form-group">
             <label for="status">Status : </label>
