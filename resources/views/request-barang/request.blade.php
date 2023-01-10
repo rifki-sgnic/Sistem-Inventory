@@ -68,8 +68,9 @@
         <form action="{{ route('request-barang.cetak') }}" method="post">
           <div class="modal-body">
             @csrf
-            <div class="form-group row align-items-center">
-              <label for="status" class="col-sm-4 col-form-label">Nama Produk</label>
+            <p class="mb-2">Cetak data dengan status Approved</p>
+            {{-- <div class="form-group row align-items-center">
+              <label for="status" class="col-sm-4 col-form-label">Status</label>
               <div>:</div>
               <div class="col-sm-5">
                 <select id="status" name="status" class="form-control">
@@ -78,7 +79,7 @@
                   <option value="rejected">Rejected</option>
                 </select>
               </div>
-            </div>
+            </div> --}}
             <div class="form-group row align-items-center">
               <label for="start_date" class="col-sm-4 col-form-label">Dari Tanggal</label>
               <div>:</div>
@@ -98,6 +99,7 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             <button type="submit" class="btn btn-primary" name="submit">Cetak Data</button>
+            {{-- <a href="{{ route('request-barang.cetak') }}">Testing</a> --}}
           </div>
         </form>
 

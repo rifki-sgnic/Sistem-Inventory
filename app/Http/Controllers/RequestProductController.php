@@ -98,17 +98,23 @@ class RequestProductController extends Controller
         $startDate = Carbon::createFromFormat('Y-m-d H', $request['start_date'] . '0')->startOfDay()->toDateTimeString();
         $endDate = Carbon::createFromFormat('Y-m-d H', $request['end_date'] . '23')->endOfDay()->toDateTimeString();
 
-        if (!$request['status']) {
-            /* All Status */
-            $result = RequestProduct::whereBetween('created_at', [$startDate, $endDate])->get();
-        } else {
-            /* Selected Status */
-            $result = RequestProduct::select()->where([
-                ['status', '=', $request['status']],
-                ['created_at', '>=', $startDate],
-                ['created_at', '<=', $endDate]
-            ])->get();
-        }
+        // if (!$request['status']) {
+        //     /* All Status */
+        //     $result = RequestProduct::whereBetween('created_at', [$startDate, $endDate])->get();
+        // } else {
+        //     /* Selected Status */
+        // $result = RequestProduct::select()->where([
+        //     ['status', '=', $request['status']],
+        //     ['created_at', '>=', $startDate],
+        //     ['created_at', '<=', $endDate]
+        // ])->get();
+        // }
+
+        $result = RequestProduct::select()->where([
+            ['status', '=', 'approved'],
+            ['created_at', '>=', $startDate],
+            ['created_at', '<=', $endDate]
+        ])->get();
 
 
         $pdf = Pdf::loadView('request-barang.request_pdf', [
@@ -118,5 +124,10 @@ class RequestProductController extends Controller
         ]);
 
         return $pdf->stream();
+
+        // $result = RequestProduct::select()->where('status', '=', 'approved');
+        // return view('request-barang.request_pdf', [
+        //     'requests' => $result,
+        // ]);
     }
 }
