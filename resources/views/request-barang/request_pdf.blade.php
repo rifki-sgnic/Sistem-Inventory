@@ -48,7 +48,7 @@
     <div>
       <p>Disetujui oleh : </p>
       <img src="img/ttd.png" width="200" />
-      <p class="nama">{{ auth()->user()->name }}</p>
+      <p class="nama">Manager</p>
     </div>
   </div>
 </body>
